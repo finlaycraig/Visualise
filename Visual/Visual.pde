@@ -2,6 +2,8 @@ PFont font;
 
 int m;
 
+int n;
+
 float [] temps = {1,2,3,4,5,6,10,1};
 
 void setup() {
