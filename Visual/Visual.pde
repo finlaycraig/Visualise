@@ -147,9 +147,26 @@ void tempCoords() {
   
 }
 
+void icePressure() { // this method draws the ice pressure arcs
 
+ // COMMENT ------- CREATE CASE ALGORITHM FOR VARIABLES
+ 
+ pushStyle(); //save previous style
+ 
+ noStroke(); //no stroke for arcs
+ fill(60, 100, 220); //fill colour blue
+ 
+ arc(width/2, height/2, 305, 305, radians(270), radians(315)); //1st sector of ice
+ arc(width/2, height/2, 345, 345, radians(315), radians(360)); //2nd sector of ice
+ arc(width/2, height/2, 305, 305, radians(0), radians(45)); //3rd sector of ice
+ arc(width/2, height/2, 305, 305, radians(45), radians(90)); //4th sector of ice
+ arc(width/2, height/2, 305, 305, radians(90), radians(135)); //5th sector of ice
+ arc(width/2, height/2, 305, 305, radians(135), radians(180)); //6th sector of ice
+ arc(width/2, height/2, 305, 305, radians(180), radians(225)); //7th sector of ice
 
-
+ popStyle(); //restore previous style
+ 
+}
 
 //BELOW IS STATIC GRAPHICS FOR SETUP OF CIRCLE. 
 
@@ -157,6 +174,7 @@ void circlesAndLines() {
  
   ellipse(512, 384, 580, 580);//outer circle
   ellipse(512, 384, 435, 435);//wind
+  icePressure(); //draw the ice pressure arcs
   ellipse(512, 384, 290, 290);//pressure
   dashedLines();//draw the dashed measurement lines  
   ellipse(512, 384, 145, 145);//centre circle
