@@ -4,12 +4,12 @@ int m;
 
 int n;
 
-float [] temps = {-90,-23,-64,-9,-74,-55,-13,-100,-33};
-float [] tempsRange = {-1000,-80,-70,-60,-50,-40,-30,-20,-10,0};
+  float [] temps = {-90,-23,-64,-9,-74,-55,-13,-100,-33};
+  float [] tempsRange = {-1000,-80,-70,-60,-50,-40,-30,-20,-10,0};
 
 //float [] currentIcePressure = {2, 2, 1, 4, 5, 6, 7, 8}; //array for live data feed of current ice pressure, latest at [0]
 
-int[] AHourX = {512,512,512,512,512,512,512,512,512,512}; 
+  int[] AHourX = {512,512,512,512,512,512,512,512,512,512}; 
   int[] AHourY = {308,301,294,287,280,273,266,259,252,245};
   
   int[] BHourX = {566,571,576,581,586,591,596,601,606,611};
@@ -27,14 +27,14 @@ int[] AHourX = {512,512,512,512,512,512,512,512,512,512};
   int[] FHourX = {458,453,448,443,438,433,428,423,418,413};
   int[] FHourY = {438,443,448,453,458,463,468,473,478,483};
   
-  int[] GHourX = {458,453,448,443,438,433,428,423,418,413};
-  int[] GHourY = {438,443,448,453,458,463,468,473,478,483};
+  int[] GHourX = {372,379,386,393,400,407,414,421,428,435};
+  int[] GHourY = {384,384,384,384,384,384,384,384,384,384};
   
-  int[] HHourX = {372,379,386,393,400,407,414,421,428,435};
-  int[] HHourY = {384,384,384,384,384,384,384,384,384,384};
+  int[] HHourX = {457,452,447,442,437,432,427,422,417,412};
+  int[] HHourY = {330,325,320,315,310,305,300,295,290,285};
   
-  int[] IHourX = {457,452,447,442,437,432,427,422,417,412};
-  int[] IHourY = {330,325,320,315,310,305,300,295,290,285};
+//  int[] IHourX = {457,452,447,442,437,432,427,422,417,412};
+//  int[] IHourY = {330,325,320,315,310,305,300,295,290,285};
 
 void setup() {
 
@@ -47,13 +47,13 @@ void setup() {
   
   tempCoords();
   
-   
+   plotTempsAndLines();
   
 }
 
 void draw() {
 
-  plotTempsAndLines();
+  
    
 }
 
@@ -152,101 +152,75 @@ void plotTempsAndLines() {
  
  for(int i=0; i<9; i++) {
    
-   println("outside");
-   
-   
-  
-   
     for(int h=0; h<9; h++) {
-      
-   println(tempsRange[h]);
-   
-   println(temps[i]);
-   
-   println(tempsRange[h+1]);
-   
-   
-   
-   println(i);
-   println(h);
- 
-    if(temps[i] <= tempsRange[h] && temps[i] <= tempsRange[h+1]) {
-      
-      
-      
-      println("yes");
+  
+    if(temps[i] >= tempsRange[h] && temps[i] <= tempsRange[h+1]) {
     
       if(i==0) {
       
         ellipse(AHourX[h],AHourY[h],5,5);
-        delay(500);
+
         
       }
       
       else if(i==1) {
       
         ellipse(BHourX[h],BHourY[h],5,5);
-        delay(500);
+       
         
       }
       
       else if(i==2) {
       
         ellipse(CHourX[h],CHourY[h],5,5);
-        delay(500);
+       
         
       }
       
       else if(i==3) {
       
         ellipse(DHourX[h],DHourY[h],5,5);
-        delay(500);
+       
         
       }
       
       else if(i==4) {
       
         ellipse(EHourX[h],EHourY[h],5,5);
-        delay(500);
+        
         
       }
       
       else if(i==5) {
       
         ellipse(FHourX[h],FHourY[h],5,5);
-        delay(500);
+        
         
       }
       
       else if(i==6) {
       
         ellipse(GHourX[h],GHourY[h],5,5);
-        delay(500);
+        
         
       }
       
       else if(i==7) {
       
         ellipse(HHourX[h],HHourY[h],5,5);
-        delay(500);
+       
         
       }
       
-      else if(i==8) {
-      
-        ellipse(IHourX[h],IHourY[h],5,5);
-        delay(500);
-        
-      }      
+//      else if(i==8) {
+//      
+//        ellipse(IHourX[h],IHourY[h],5,5);
+//        
+//        
+//      }      
      
     }
-    
-    else {
-       
-       println("no");
-        
-      }
-    
+     
     }
     
  }
@@ -280,9 +254,11 @@ void tempCoords() {
      
      ellipse(FHourX[j],FHourY[j],5,5);
      
+     ellipse(GHourX[j],GHourY[j],5,5);
+     
      ellipse(HHourX[j],HHourY[j],5,5);
      
-     ellipse(IHourX[j],IHourY[j],5,5);
+//     ellipse(IHourX[j],IHourY[j],5,5);
      
   }
   
