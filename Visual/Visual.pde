@@ -4,6 +4,9 @@ int m;
 
 int n;
 
+int previousTempX;
+int previousTempY;
+
   float [] temps = {-90,-23,-64,-9,-74,-55,-13,-100,-33};
   float [] tempsRange = {-1000,-80,-70,-60,-50,-40,-30,-20,-10,0};
 
@@ -59,7 +62,7 @@ void setup() {
   
   tempCoords();
   
-   plotTempsAndLines();
+  plotTempsAndLines();
   
 }
 
@@ -88,83 +91,84 @@ void staticGraphics() {
 }
 
 
-void plotTemps() {//this method plots the points of temperature taken from the array
- 
- int tempStartX = 0;
- int tempStartY = -108;
- 
- float previousX = 0;
- float previousY = temps[0];
- 
- float tempRadians = -PI;
- 
- for(int k=0; k<=7; k++) {
-   
-   pushMatrix();
- 
-   translate(width/2, height/2);
-   rotate(tempRadians);
-   
-   
-   
-   if(k==0) {//use this if statement to make the first point green.
-     
-   pushStyle();
-   
-   fill(7,165,0);
-    
-   ellipse(0, tempDecode(temps[k]), 5, 5);//draw point
-   
-   popStyle();
-   
-   }
-   
-   else {
-    
-    ellipse(0, tempDecode(temps[k]), 5, 5);//draw point
-     
-   }
- 
-   popMatrix();
-   
-   tempRadians = tempRadians + (PI/4);
-   
-   previousY = tempDecode(temps[k]);
- 
-  }
-  
-}
+//void plotTemps() {//this method plots the points of temperature taken from the array
+// 
+// int tempStartX = 0;
+// int tempStartY = -108;
+// 
+// float previousX = 0;
+// float previousY = temps[0];
+// 
+// float tempRadians = -PI;
+// 
+// for(int k=0; k<=7; k++) {
+//   
+//   pushMatrix();
+// 
+//   translate(width/2, height/2);
+//   rotate(tempRadians);
+//   
+//   
+//   
+//   if(k==0) {//use this if statement to make the first point green.
+//     
+//   pushStyle();
+//   
+//   fill(7,165,0);
+//    
+//   ellipse(0, tempDecode(temps[k]), 5, 5);//draw point
+//   
+//   popStyle();
+//   
+//   }
+//   
+//   else {
+//    
+//    ellipse(0, tempDecode(temps[k]), 5, 5);//draw point
+//     
+//   }
+// 
+//   popMatrix();
+//   
+//   tempRadians = tempRadians + (PI/4);
+//   
+//   previousY = tempDecode(temps[k]);
+// 
+//  }
+//  
+//}
 
-public float tempDecode(float yTemp) {
-  
-  if(yTemp == 1) {
-   
-    return 115;
-    
-  } 
-  
-  if(yTemp == 2) {
-   
-    return 120;
-    
-  }
- 
- if(yTemp == 10) {
-   
-    return 140;
-    
-  }  
-  
-  return 115;
-  
-}
+//public float tempDecode(float yTemp) {
+//  
+//  if(yTemp == 1) {
+//   
+//    return 115;
+//    
+//  } 
+//  
+//  if(yTemp == 2) {
+//   
+//    return 120;
+//    
+//  }
+// 
+// if(yTemp == 10) {
+//   
+//    return 140;
+//    
+//  }  
+//  
+//  return 115;
+//  
+//}
 
 
 void plotTempsAndLines() {
   
   pushStyle();
   
-  fill(165,0,0);
+  fill(0,52,180);
+  stroke(0,52,180);
  
  for(int i=0; i<9; i++) {
    
@@ -175,34 +179,120 @@ void plotTempsAndLines() {
       if(i==0) {
       
         ellipse(AHourX[h],AHourY[h],5,5);
-
+        
+        if(h==0) {
+          
+          previousTempX = AHourX[h];
+          previousTempY = AHourY[h];
+        
+      }
+        
+        pushStyle();
+        
+        stroke(185,185,185);
+        
+        line(previousTempX, previousTempY, AHourX[h],AHourY[h]);
+        
+        popStyle();
+        
+        previousTempX = AHourX[h];
+        previousTempY = AHourY[h];
         
       }
       
       else if(i==1) {
       
         ellipse(BHourX[h],BHourY[h],5,5);
-       
         
+        if(h==0) {
+          
+          previousTempX = BHourX[h];
+          previousTempY = BHourY[h];
+        
+      }
+
+        pushStyle();
+        
+        stroke(185,185,185);
+
+        line(previousTempX, previousTempY, BHourX[h],BHourY[h]);
+        
+        popStyle();
+        
+        previousTempX = BHourX[h];
+        previousTempY = BHourY[h];
+         
       }
       
       else if(i==2) {
       
         ellipse(CHourX[h],CHourY[h],5,5);
        
+        if(h==0) {
+          
+          previousTempX = CHourX[h];
+          previousTempY = CHourY[h];
+        
+      }
+      
+        pushStyle();
+        
+        stroke(185,185,185);
+
+        line(previousTempX, previousTempY, CHourX[h],CHourY[h]);
+        
+        popStyle();
+        
+        previousTempX = CHourX[h];
+        previousTempY = CHourY[h];
         
       }
       
       else if(i==3) {
       
         ellipse(DHourX[h],DHourY[h],5,5);
-       
         
+        if(h==0) {
+          
+          previousTempX = DHourX[h];
+          previousTempY = DHourY[h];
+        
+      }
+      
+        pushStyle();
+        
+        stroke(185,185,185);
+
+        line(previousTempX, previousTempY, DHourX[h],DHourY[h]);
+        
+        popStyle();
+        
+        previousTempX = DHourX[h];
+        previousTempY = DHourY[h];
+       
       }
       
       else if(i==4) {
       
         ellipse(EHourX[h],EHourY[h],5,5);
+        
+        if(h==0) {
+          
+          previousTempX = EHourX[h];
+          previousTempY = EHourY[h];
+        
+      }
+
+        pushStyle();
+        
+        stroke(185,185,185);
+
+        line(previousTempX, previousTempY, EHourX[h],EHourY[h]);
+        
+        popStyle();
+        
+        previousTempX = EHourX[h];
+        previousTempY = EHourY[h];
         
         
       }
@@ -211,6 +301,23 @@ void plotTempsAndLines() {
       
         ellipse(FHourX[h],FHourY[h],5,5);
         
+        if(h==0) {
+          
+          previousTempX = FHourX[h];
+          previousTempY = FHourY[h];
+        
+      }
+      
+        pushStyle();
+        
+        stroke(185,185,185);
+
+        line(previousTempX, previousTempY, FHourX[h],FHourY[h]);
+        
+        popStyle();
+        
+        previousTempX = FHourX[h];
+        previousTempY = FHourY[h];
         
       }
       
@@ -218,19 +325,53 @@ void plotTempsAndLines() {
       
         ellipse(GHourX[h],GHourY[h],5,5);
         
+        if(h==0) {
+          
+          previousTempX = GHourX[h];
+          previousTempY = GHourY[h];
+        
+      }
+      
+        pushStyle();
+        
+        stroke(185,185,185);
+
+        line(previousTempX, previousTempY, GHourX[h],GHourY[h]);
+        
+        popStyle();
+        
+        previousTempX = GHourX[h];
+        previousTempY = GHourY[h];
         
       }
       
       else if(i==7) {
       
         ellipse(HHourX[h],HHourY[h],5,5);
-       
+        
+        if(h==1) {
+          
+          previousTempX = HHourX[h];
+          previousTempY = HHourY[h];
+        
+      }
+      
+        pushStyle();
+        
+        stroke(185,185,185);
+
+        line(previousTempX, previousTempY, HHourX[h],HHourY[h]);
+        
+        popStyle();
+        
+        previousTempX = HHourX[h];
+        previousTempY = HHourY[h];
         
       }
       
 //      else if(i==8) {
 //      
-//        ellipse(IHourX[h],IHourY[h],5,5);
+//       ellipse(IHourX[h],IHourY[h],5,5);
 //        
 //        
 //      }      
