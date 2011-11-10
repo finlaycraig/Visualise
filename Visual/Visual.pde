@@ -14,6 +14,9 @@ void setup() {
   font = loadFont("Century-10.vlw");
   textFont(font);
   staticGraphics();
+  
+  tempCoords();
+  
 }
 
 void draw() {
@@ -28,7 +31,7 @@ void staticGraphics() {
  
  textMarkings(); 
  
- plotTemps();
+ //plotTemps();  
   
 }
 
@@ -107,7 +110,42 @@ public float tempDecode(float yTemp) {
 
 
 
+void tempCoords() {
 
+
+  int[] AHourX = {512,512,512,512,512,512,512,512,512,512}; 
+  int[] AHourY = {308,301,294,287,280,273,266,259,252,245};
+  
+//  int[] BHourX = {563,568,573,578,583,588,593,598,603,608,613};
+//  int[] BHourY = {333,328,323,318,313,308,303,298,293,288,283};
+  
+  int[] BHourX = {566,571,576,581,586,591,596,601,606,611};
+  int[] BHourY = {330,325,320,315,310,305,300,295,290,285};
+  
+  int[] CHourX = {589,596,603,610,617,624,631,638,645,652};
+  int[] CHourY = {384,384,384,384,384,384,384,384,384,384};
+  
+
+  
+//  ellipse(584,384,1,1);
+//  
+//  int j = 1;
+  
+//ellipse(BHourX[2],BHourY[2],1,1);
+  
+  for(int j=0; j<=9; j++) {
+    
+   ellipse(AHourX[j],AHourY[j],5,5);
+    
+   ellipse(BHourX[j],BHourY[j],5,5);
+   
+   ellipse(CHourX[j],CHourY[j],5,5);
+   
+   //ellipse(HHourX[j],HHourY[j],5,5);
+    
+  }
+  
+}
 
 
 
@@ -128,7 +166,7 @@ void circlesAndLines() {
   strokeWeight(3);//define stroke for startline only
   stroke(165, 0, 0);//define stroke colour for startline only
   
-  line(512,311, 512,239);
+  //line(512,311, 512,239);
   
   line(510,311,510,93);//red startline
   
