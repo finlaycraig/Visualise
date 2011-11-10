@@ -4,100 +4,109 @@ int m;
 
 int n;
 
-float [] temps = {
-  1, 2, 3, 4, 5, 6, 10, 1
-};
+float [] temps = {1,2,3,4,5,6,10,1};
 
-float [] pressure = {
-  4, 2, 3, 4, 5, 6, 7, 8
-};
+float [] pressure = {1,2,3,4,5,6,7,8};
 
 void setup() {
 
   size(1024, 768);
   smooth();
-
+  
   font = loadFont("Century-10.vlw");
   textFont(font);
   staticGraphics();
-
+  
   tempCoords();
+  
 }
 
 void draw() {
+
+  
+   
 }
 
 void staticGraphics() {
-
-  circlesAndLines();
-
-  textMarkings(); 
-
-  //plotTemps();
+ 
+ circlesAndLines();
+ 
+ textMarkings(); 
+ 
+ //plotTemps();  
+  
 }
 
 
 void plotTemps() {//this method plots the points of temperature taken from the array
-
-  int tempStartX = 0;
-  int tempStartY = -108;
-
-  float previousX = 0;
-  float previousY = temps[0];
-
-  float tempRadians = -PI;
-
-  for (int k=0; k<=7; k++) {
-
-    pushMatrix();
-
-    translate(width/2, height/2);
-    rotate(tempRadians);
-
-
-
-    if (k==0) {//use this if statement to make the first point green.
-
-      pushStyle();
-
-      fill(7, 165, 0);
-
-      ellipse(0, tempDecode(temps[k]), 5, 5);//draw point
-
-      popStyle();
-    }
-
-    else {
-
-      ellipse(0, tempDecode(temps[k]), 5, 5);//draw point
-    }
-
-    popMatrix();
-
-    tempRadians = tempRadians + (PI/4);
-
-    previousY = tempDecode(temps[k]);
+ 
+ int tempStartX = 0;
+ int tempStartY = -108;
+ 
+ float previousX = 0;
+ float previousY = temps[0];
+ 
+ float tempRadians = -PI;
+ 
+ for(int k=0; k<=7; k++) {
+   
+   pushMatrix();
+ 
+   translate(width/2, height/2);
+   rotate(tempRadians);
+   
+   
+   
+   if(k==0) {//use this if statement to make the first point green.
+     
+   pushStyle();
+   
+   fill(7,165,0);
+    
+   ellipse(0, tempDecode(temps[k]), 5, 5);//draw point
+   
+   popStyle();
+   
+   }
+   
+   else {
+    
+    ellipse(0, tempDecode(temps[k]), 5, 5);//draw point
+     
+   }
+ 
+   popMatrix();
+   
+   tempRadians = tempRadians + (PI/4);
+   
+   previousY = tempDecode(temps[k]);
+ 
   }
+  
 }
 
 public float tempDecode(float yTemp) {
-
-  if (yTemp == 1) {
-
+  
+  if(yTemp == 1) {
+   
     return 115;
+    
   } 
-
-  if (yTemp == 2) {
-
+  
+  if(yTemp == 2) {
+   
     return 120;
+    
   }
-
-  if (yTemp == 10) {
-
+ 
+ if(yTemp == 10) {
+   
     return 140;
+    
   }  
-
+  
   return 115;
+  
 }
 
 
@@ -106,7 +115,6 @@ public float tempDecode(float yTemp) {
 void tempCoords() {
 
 
-<<<<<<< HEAD
   int[] AHourX = {512,512,512,512,512,512,512,512,512,512}; 
   int[] AHourY = {308,301,294,287,280,273,266,259,252,245};
   
@@ -158,149 +166,53 @@ void tempCoords() {
    
    ellipse(IHourX[j],IHourY[j],5,5);
     
-=======
-  int[] AHourX = {
-    512, 512, 512, 512, 512, 512, 512, 512, 512, 512
-  }; 
-  int[] AHourY = {
-    308, 301, 294, 287, 280, 273, 266, 259, 252, 245
-  };
-
-  //  int[] BHourX = {563,568,573,578,583,588,593,598,603,608,613};
-  //  int[] BHourY = {333,328,323,318,313,308,303,298,293,288,283};
-
-  int[] BHourX = {
-    566, 571, 576, 581, 586, 591, 596, 601, 606, 611
-  };
-  int[] BHourY = {
-    330, 325, 320, 315, 310, 305, 300, 295, 290, 285
-  };
-
-  int[] CHourX = {
-    589, 596, 603, 610, 617, 624, 631, 638, 645, 652
-  };
-  int[] CHourY = {
-    384, 384, 384, 384, 384, 384, 384, 384, 384, 384
-  };
-
-
-
-  //  ellipse(584,384,1,1);
-  //  
-  //  int j = 1;
-
-  //ellipse(BHourX[2],BHourY[2],1,1);
-
-  for (int j=0; j<=9; j++) {
-
-    ellipse(AHourX[j], AHourY[j], 5, 5);
-
-    ellipse(BHourX[j], BHourY[j], 5, 5);
-
-    ellipse(CHourX[j], CHourY[j], 5, 5);
-
-    //ellipse(HHourX[j],HHourY[j],5,5);
->>>>>>> Added Ice Pressure Functions
   }
+  
 }
 
 void icePressure() { // this method draws the ice pressure arcs
 
-  // COMMENT ------- CREATE CASE ALGORITHM FOR VARIABLES
+ // COMMENT ------- CREATE CASE ALGORITHM FOR VARIABLES
+ 
+ pushStyle(); //save previous style
+ 
+ noStroke(); //no stroke for arcs
+ fill(60, 100, 220); //fill colour blue
+ 
+ arc(width/2, height/2, 305, 305, radians(270), radians(315)); //1st sector of ice
+ arc(width/2, height/2, 345, 345, radians(315), radians(360)); //2nd sector of ice
+ arc(width/2, height/2, 305, 305, radians(0), radians(45)); //3rd sector of ice
+ arc(width/2, height/2, 305, 305, radians(45), radians(90)); //4th sector of ice
+ arc(width/2, height/2, 305, 305, radians(90), radians(135)); //5th sector of ice
+ arc(width/2, height/2, 305, 305, radians(135), radians(180)); //6th sector of ice
+ arc(width/2, height/2, 305, 305, radians(180), radians(225)); //7th sector of ice
 
-  float[] PressureLevels = {
-    290, 304.5, 319, 333.5, 348, 362.5, 377, 391.5, 406, 420.5, 435
-  }; //array for ice pressure levels
-
-  int i = 0;
-  
-    float[] icePressureIn = {1, 2 , 3,4,5,6,7,8,9,10,11};
-
-
-
-
-  if (pressure[0] <= icePressureIn[0]) {
-    i = 0;
-  }
-
-  if (pressure[0] > icePressureIn[0] && pressure[0] <= icePressureIn[1]) {
-    i = 1;
-  }
-
-  if (pressure[0] > icePressureIn[1] && pressure[0] <= icePressureIn[2]) {
-    i = 2;
-  }
-
-  if (pressure[0] > icePressureIn[2] && pressure[0] <= icePressureIn[3]) {
-    i = 3;
-  }
-
-  if (pressure[0] > icePressureIn[3] && pressure[0] <= icePressureIn[4]) {
-    i = 4;
-  }
-
-  if (pressure[0] > icePressureIn[4] && pressure[0] <= icePressureIn[5]) {
-    i = 5;
-  }
-
-  if (pressure[0] > icePressureIn[5] && pressure[0] <= icePressureIn[6]) {
-    i = 6;
-  }
-
-  if (pressure[0] > icePressureIn[6] && pressure[0] <= icePressureIn[7]) {
-    i = 7;
-  }
-
-  if (pressure[0] > icePressureIn[7] && pressure[0] <= icePressureIn[8]) {
-    i = 8;
-  }
-
-  if (pressure[0] > icePressureIn[8] && pressure[0] <= icePressureIn[9]) {
-    i = 9;
-  }
-
-  if (pressure[0] > icePressureIn[9] && pressure[0] <= icePressureIn[10]) {
-    i = 10;
-  }
-
-  pushStyle(); //save previous style
-
-  noStroke(); //no stroke for arcs
-  fill(60, 100, 220); //fill colour blue
-
-  arc(width/2, height/2, PressureLevels[i], PressureLevels[i], radians(270), radians(315)); //1st sector of ice
-  arc(width/2, height/2, PressureLevels[i], PressureLevels[i], radians(315), radians(360)); //2nd sector of ice
-  arc(width/2, height/2, PressureLevels[i], PressureLevels[i], radians(0), radians(45)); //3rd sector of ice
-  arc(width/2, height/2, PressureLevels[i], PressureLevels[i], radians(45), radians(90)); //4th sector of ice
-  arc(width/2, height/2, PressureLevels[i], PressureLevels[i], radians(90), radians(135)); //5th sector of ice
-  arc(width/2, height/2, PressureLevels[i], PressureLevels[i], radians(135), radians(180)); //6th sector of ice
-  arc(width/2, height/2, PressureLevels[i], PressureLevels[i], radians(180), radians(225)); //7th sector of ice
-
-  popStyle(); //restore previous style
+ popStyle(); //restore previous style
+ 
 }
-
 
 //BELOW IS STATIC GRAPHICS FOR SETUP OF CIRCLE. 
 
 void circlesAndLines() {
-
+ 
   ellipse(512, 384, 580, 580);//outer circle
   ellipse(512, 384, 435, 435);//wind
   icePressure(); //draw the ice pressure arcs
   ellipse(512, 384, 290, 290);//pressure
   dashedLines();//draw the dashed measurement lines  
   ellipse(512, 384, 145, 145);//centre circle
-
+  
   pushStyle();//save previous style
-
-    strokeWeight(3);//define stroke for startline only
+  
+  strokeWeight(3);//define stroke for startline only
   stroke(165, 0, 0);//define stroke colour for startline only
-
+  
   //line(512,311, 512,239);
-
-  line(510, 311, 510, 93);//red startline
-
+  
+  line(510,311,510,93);//red startline
+  
   popStyle();//restore previous style
+  
 }
 
 void dashedLines() {
@@ -315,38 +227,38 @@ void dashedLines() {
     point(x, y);
   }
   //end of line 1
-
+  
   //line 2
-  x1 = 222;
-  y1 = 384;
-  x2 = 802;
-  y2 = 384;
+   x1 = 222;
+   y1 = 384;
+   x2 = 802;
+   y2 = 384;
   for (int i=0; i<=80; i++) {
     float x = lerp(x1, x2, i/80.0);
     float y = lerp(y1, y2, i/80.0);
     point(x, y);
   }
   //end of line 2
-
-  //line 3   
-  x1 = 717;
-  y1 = 180;
-  x2 = 307;
-  y2 = 590;
+  
+   //line 3   
+   x1 = 717;
+   y1 = 180;
+   x2 = 307;
+   y2 = 590;
   for (int i=0; i<=80; i++) {
     float x = lerp(x1, x2, i/80.0);
     float y = lerp(y1, y2, i/80.0);
     point(x, y);
   }
 
-
+  
   //end of line 3
-
+  
   //line 4
-  x1 = 307;
-  y1 = 180;
-  x2 = 717;
-  y2 = 590;
+   x1 = 307;
+   y1 = 180;
+   x2 = 717;
+   y2 = 590;
 
   for (int i=0; i<=80; i++) {
     float x = lerp(x1, x2, i/80.0);
@@ -354,86 +266,87 @@ void dashedLines() {
     point(x, y);
   }
   //end of line 4
+  
 }
 
 void textMarkings() {
-
-  pushStyle();//save previus style
-
-    fill(112, 111, 111);//apply fill colour to text
-
-  //hour markings
-
-  text("0H", 504, 325);//zero-hour indicator
-  text("0.5H", 540, 344);//half-hour indicator
-  text("1H", 566, 390);//one-hour indicator
-  text("1.5H", 540, 433);//hour-and-a-half indicator
-  text("2H", 504, 452);//two-hour indicator
-  text("2.5H", 462, 433);//two-and-a-half-hours indicator
-  text("3H", 444, 390);//three-hour indicator
-  text("0.5H", 462, 344);//half-hour indicator
-
-  //hour markings
-
-  //temperature markings
-
+  
+ pushStyle();//save previus style
+ 
+ fill(112,111,111);//apply fill colour to text
+ 
+ //hour markings
+ 
+ text("0H",504,325);//zero-hour indicator
+ text("0.5H",540,344);//half-hour indicator
+ text("1H",566,390);//one-hour indicator
+ text("1.5H",540,433);//hour-and-a-half indicator
+ text("2H",504,452);//two-hour indicator
+ text("2.5H",462,433);//two-and-a-half-hours indicator
+ text("3H",444,390);//three-hour indicator
+ text("0.5H",462,344);//half-hour indicator
+ 
+ //hour markings
+ 
+ //temperature markings
+  
   pushMatrix();//prep. for text rotation
-
+  
   translate(width/2, height/2);
   rotate(PI/-8.0);
-  text("Temp (˚C)", -27, -102); 
-
+  text("Temp (˚C)",-27,-102); 
+  
   popMatrix();//end of rotation
-
-  text("-10˚", 490, 311);//-10 degrees celcius
-  text("0˚", 500, 280);//-10 degrees celcius
-  text("10˚", 493, 250);
-
-  //end of temperature markings
-
+  
+  text("-10˚",490,311);//-10 degrees celcius
+  text("0˚",500,280);//-10 degrees celcius
+  text("10˚",493,250);
+ 
+ //end of temperature markings
+ 
   //ice thickness markings
-
+  
   pushMatrix();//prep. for text rotation
-
+  
   translate(width/2, height/2);
   rotate(PI/-8.0);
-  text("Ice Pressure", -30, -180); 
-
+  text("Ice Pressure",-30,-180); 
+  
   popMatrix();//end of rotation
-
-  text("0 kPa", 478, 237);//
-  text("6 kPa", 478, 210);//
-  text("+12 kPa", 468, 180);
-
-  //end of ice thickness markings
-
-  //wind speed markings
-
+  
+  text("0 kPa",478,237);//
+  text("6 kPa",478,210);//
+  text("+12 kPa",468,180);
+ 
+ //end of ice thickness markings
+ 
+ //wind speed markings
+  
   pushMatrix();//prep. for text rotation
-
+  
   translate(width/2, height/2);
   rotate(PI/-8.0);
-  text("Wind Speed", -30, -250);
-  text("0 MPH", -20, -240);  
-
+  text("Wind Speed",-30,-250);
+  text("0 MPH",-20,-240);  
+  
   popMatrix();//end of rotation
-
-  text("+60 MPH", 463, 107);//top right
-  text("+60 MPH", 463, 165);//bottom right
-
+  
+  text("+60 MPH",463,107);//top right
+  text("+60 MPH",463,165);//bottom right
+  
   pushMatrix();//prep. for text rotation
-
+  
   translate(width/2, height/2);
   rotate(-0.8);
-  text("+60 MPH", 5, -220);
-  text("+60 MPH", 5, -277);   
-
+  text("+60 MPH",5,-220);
+  text("+60 MPH",5,-277);   
+  
   popMatrix();//end of rotation
-
-  //end of wind speed markings
-
-  popStyle();//reload previous style
+ 
+ //end of wind speed markings
+ 
+ popStyle();//reload previous style
+ 
 }
 
 //END OF STATIC GRAPHICS
-
