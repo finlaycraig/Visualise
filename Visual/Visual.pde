@@ -6,6 +6,8 @@ int n;
 
 float [] temps = {1,2,3,4,5,6,10,1};
 
+float [] pressure = {1,2,3,4,5,6,7,8};
+
 void setup() {
 
   size(1024, 768);
