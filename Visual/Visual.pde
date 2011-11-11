@@ -7,8 +7,8 @@ int n;
 int previousTempX;
 int previousTempY;
 
-  float [] temps = {-90,-23,-64,-9,-74,-55,-13,-100,-33};
-  float [] tempsRange = {-1000,-80,-70,-60,-50,-40,-30,-20,-10,0};
+  float [] temps = {10,-23,-64,-9,-74,-55,-13,-33,-10};
+  float [] tempsRange = {-1000,-80,-70,-60,-50,-40,-30,-20,-10,100000};
 
 //float [] currentIcePressure = {2, 2, 1, 4, 5, 6, 7, 8}; //array for live data feed of current ice pressure, latest at [0]
 
@@ -153,29 +153,35 @@ void plotTempsAndLines() {
   
   fill(0,52,180);
   stroke(0,52,180);
- 
- for(int i=0; i<9; i++) {
-   
-    for(int h=0; h<9; h++) {
   
-    if(temps[i] >= tempsRange[h] && temps[i] <= tempsRange[h+1]) {
+//       float [] temps = {-50,-23,-64,-9,-74,-55,-13,-100,-33};
+//  float [] tempsRange = {-1000,-80,-70,-60,-50,-40,-30,-20,-10,0};
+
+//  int[] AHourX = {512,512,512,512,512,512,512,512,512,512}; 
+//  int[] AHourY = {308,301,294,287,280,273,266,259,252,245};
+ 
+ for(int i=0; i<9; i++) { //going through temps
+   
+    for(int h=0; h<9; h++) { //going through tempsRange
+  
+    if(temps[i] >= tempsRange[h] && temps[i] < tempsRange[h+1]) {
     
       if(i==0) {
       
         ellipse(AHourX[h],AHourY[h],5,5);
         
-        if(h==0) {
-          
-          previousTempX = AHourX[h];
-          previousTempY = AHourY[h];
         
-      }
+          
+//          previousTempX = AHourX[h];
+//          previousTempY = AHourY[h];
+//        
+      
         
         pushStyle();
         
         stroke(185,185,185);
         
-        line(previousTempX, previousTempY, AHourX[h],AHourY[h]);
+//        line(previousTempX, previousTempY, AHourX[h],AHourY[h]);
         
         popStyle();
         
@@ -188,13 +194,6 @@ void plotTempsAndLines() {
       
         ellipse(BHourX[h],BHourY[h],5,5);
         
-        if(h==0) {
-          
-          previousTempX = BHourX[h];
-          previousTempY = BHourY[h];
-        
-      }
-
         pushStyle();
         
         stroke(185,185,185);
@@ -212,12 +211,12 @@ void plotTempsAndLines() {
       
         ellipse(CHourX[h],CHourY[h],5,5);
        
-        if(h==0) {
-          
-          previousTempX = CHourX[h];
-          previousTempY = CHourY[h];
-        
-      }
+//        if(h==0) {
+//          
+//          previousTempX = CHourX[h];
+//          previousTempY = CHourY[h];
+//        
+//      }
       
         pushStyle();
         
@@ -236,12 +235,12 @@ void plotTempsAndLines() {
       
         ellipse(DHourX[h],DHourY[h],5,5);
         
-        if(h==0) {
-          
-          previousTempX = DHourX[h];
-          previousTempY = DHourY[h];
-        
-      }
+//        if(h==0) {
+//          
+//          previousTempX = DHourX[h];
+//          previousTempY = DHourY[h];
+//        
+//      }
       
         pushStyle();
         
@@ -260,12 +259,12 @@ void plotTempsAndLines() {
       
         ellipse(EHourX[h],EHourY[h],5,5);
         
-        if(h==0) {
-          
-          previousTempX = EHourX[h];
-          previousTempY = EHourY[h];
-        
-      }
+//        if(h==0) {
+//          
+//          previousTempX = EHourX[h];
+//          previousTempY = EHourY[h];
+//        
+//      }
 
         pushStyle();
         
@@ -285,12 +284,12 @@ void plotTempsAndLines() {
       
         ellipse(FHourX[h],FHourY[h],5,5);
         
-        if(h==0) {
-          
-          previousTempX = FHourX[h];
-          previousTempY = FHourY[h];
-        
-      }
+//        if(h==0) {
+//          
+//          previousTempX = FHourX[h];
+//          previousTempY = FHourY[h];
+//        
+//      }
       
         pushStyle();
         
@@ -309,12 +308,12 @@ void plotTempsAndLines() {
       
         ellipse(GHourX[h],GHourY[h],5,5);
         
-        if(h==0) {
-          
-          previousTempX = GHourX[h];
-          previousTempY = GHourY[h];
-        
-      }
+//        if(h==0) {
+//          
+//          previousTempX = GHourX[h];
+//          previousTempY = GHourY[h];
+//        
+//      }
       
         pushStyle();
         
@@ -333,12 +332,12 @@ void plotTempsAndLines() {
       
         ellipse(HHourX[h],HHourY[h],5,5);
         
-        if(h==1) {
-          
-          previousTempX = HHourX[h];
-          previousTempY = HHourY[h];
-        
-      }
+//        if(h==1) {
+//          
+//          previousTempX = HHourX[h];
+//          previousTempY = HHourY[h];
+//        
+//      }
       
         pushStyle();
         
@@ -406,12 +405,10 @@ void tempCoords() {
 }
 
 void icePressure() { // this method draws the ice pressure arcs
-
- /// COMMENT ------- CREATE CASE ALGORITHM FOR VARIABLES
  
   float[] icePressureLevel = {290, 304.5, 319, 333.5, 348, 362.5, 377, 391.5, 406, 420.5, 435}; //array for ice pressure levels to draw on arc
-  float[] icePressureRange = {1,2,3,4,5,6,7,8,9,10,11,999999999}; //array for ice pressure ranges to compare with current ice pressure
-  float[] currentIcePressure = {11, 2, 1, 4, 5, 6, 6}; //TESTER!!!! this code is at top of program
+  float[] icePressureRange = {-999999999,2,3,4,5,6,7,8,9,10,11,999999999}; //array for ice pressure ranges to compare with current ice pressure
+  float[] currentIcePressure = {2.4, 1.12, 4, 11, 7.0, 5, 3}; //array for live data feed of current ice pressure, latest at [0] //TESTER!!!! this code is at top of program
   int[] startRadian = {270,315,0,45,90,135,180}; //array for where each radian starts to draw arc
   int[] endRadian = {315,360,45,90,135,180,225}; //array for where each radian stops to draw arc
   
@@ -420,8 +417,8 @@ void icePressure() { // this method draws the ice pressure arcs
   noStroke(); //no stroke for arcs
   fill(60, 100, 220); //fill colour blue
   
-  for(int i = 0; i < 7; i++) {
-    for(int k = 0; k < 11; k++) {
+  for(int i = 0; i < currentIcePressure.length; i++) { //7
+    for(int k = 0; k < icePressureLevel.length; k++) { //11
       if(currentIcePressure[i] >= icePressureRange[k] && currentIcePressure[i] < icePressureRange[k+1]) {
         arc(width/2, height/2, icePressureLevel[k], icePressureLevel[k], radians(startRadian[i]), radians(endRadian[i]));
       }
