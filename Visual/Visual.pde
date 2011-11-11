@@ -409,67 +409,37 @@ void icePressure() { // this method draws the ice pressure arcs
 
  /// COMMENT ------- CREATE CASE ALGORITHM FOR VARIABLES
  
-  float[] icePressureLevel = {290, 304.5, 319, 333.5, 348, 362.5, 377, 391.5, 406, 420.5, 435}; //array for ice pressure levels
-  float[] icePressureRange = {1,2,3,4,5,6,7,8,9,10,11}; //array for ice pressure ranges to compare
-  //float icePressureRangeIncrement = 1; //difference of two (next to each other) values of icePressureRange
-  float[] currentIcePressure = {2,1}; //TESTER!!!! this code is at top of program
+  float[] icePressureLevel = {290, 304.5, 319, 333.5, 348, 362.5, 377, 391.5, 406, 420.5, 435}; //array for ice pressure levels to draw on arc
+  float[] icePressureRange = {1,2,3,4,5,6,7,8,9,10,11,999999999}; //array for ice pressure ranges to compare with current ice pressure
+  float[] currentIcePressure = {11, 2, 1, 4, 5, 6, 6}; //TESTER!!!! this code is at top of program
+  int[] startRadian = {270,315,0,45,90,135,180}; //array for where each radian starts to draw arc
+  int[] endRadian = {315,360,45,90,135,180,225}; //array for where each radian stops to draw arc
   
-  int i = 0;
-//  int l = 0;
-//  int indefiniteVal = 1;
-//  
-//  int k;
-//  
-//  if (currentIcePressure[l] > icePressureRange[k] && currentIcePressure[l] <= icePressureRange[k+1]) {
-//    i = k;
-//    k++;
-//    l++;
-//  }
-//  else {
-//    do {
-//      for (k; k < 10; k++) {
-//      }
-//    }while(currentIcePressure[l] !> icePressureRange[k] && currentIcePressure[l] !<= icePressureRange[k+1]);
-//  }
-//        
-//  
-////  for (int arcNum = 0; arcNum < 6; arcNum++) { //7 sectors of arc
-////  
-////    if (l < indefiniteVal) {
-////     // do {
-////        for (int k = 0; k < 10; k++) {
-////          do{
-////          if (currentIcePressure[l] == icePressureRange[0]) {
-////            i = 0;
-////            l++;  print("1");print("l="+l);
-////           }
-////          else if (currentIcePressure[l] > icePressureRange[k] && currentIcePressure[l] <= icePressureRange[k+1]) {
-////            i = k;
-////            l++;  print("2");print("l="+l);
-////           }
-////                 }while(l != indefiniteVal);  print("//end do//");
-////        }
-//////      }while(l != indefiniteVal);  print("//end do//");
-////    }print("//end first if//");
-////    
-////  }print("end all");
- 
   pushStyle(); //save previous style
  
   noStroke(); //no stroke for arcs
   fill(60, 100, 220); //fill colour blue
- 
-  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(270), radians(315)); //1st sector of ice
-  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(315), radians(360)); //2nd sector of ice
-  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(0), radians(45)); //3rd sector of ice
-  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(45), radians(90)); //4th sector of ice
-  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(90), radians(135)); //5th sector of ice
-  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(135), radians(180)); //6th sector of ice
-  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(180), radians(225)); //7th sector of ice
-
+  
+  for(int i = 0; i < 7; i++) {
+    for(int k = 0; k < 11; k++) {
+      if(currentIcePressure[i] >= icePressureRange[k] && currentIcePressure[i] < icePressureRange[k+1]) {
+        arc(width/2, height/2, icePressureLevel[k], icePressureLevel[k], radians(startRadian[i]), radians(endRadian[i]));
+      }
+      
+    }
+  }
   popStyle(); //restore previous style
- 
+  
 }
+
+//  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(270), radians(315)); //1st sector of ice
+//  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(315), radians(360)); //2nd sector of ice
+//  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(0), radians(45)); //3rd sector of ice
+//  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(45), radians(90)); //4th sector of ice
+//  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(90), radians(135)); //5th sector of ice
+//  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(135), radians(180)); //6th sector of ice
+//  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(180), radians(225)); //7th sector of ice
+
 
 //BELOW IS STATIC GRAPHICS FOR SETUP OF CIRCLE. 
 
