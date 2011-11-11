@@ -7,8 +7,8 @@ int n;
 int previousTempX;
 int previousTempY;
 
-  float [] temps = {10,-23,-64,-9,-74,-55,-13,-33,-10};
-  float [] tempsRange = {-1000,-80,-70,-60,-50,-40,-30,-20,-10,100000};
+  float [] temps = {10,-23,-150,-9,-74,-55,-13,-33,-10};
+  float [] tempsRange = {-100000,-90,-80,-70,-60,-50,-40,-30,-20,-10,100000};
 
 //float [] currentIcePressure = {2, 2, 1, 4, 5, 6, 7, 8}; //array for live data feed of current ice pressure, latest at [0]
 
@@ -46,34 +46,115 @@ void setup() {
   
   font = loadFont("Century-10.vlw");
   textFont(font);
+  
   staticGraphics();
-  
-  tempCoords();
-  
-  plotTempsAndLines();
   
 }
 
 void draw() {
 
+  //delay(1000);
   
-   
+  
+  
+ // delay(1000);
+  
+  //staticGraphics();
+
+  activeGraphics();
+ 
+   textMarkings();
+
+// 
+//   translate(width/2, height/2);
+//   rotate(tempRadians);
 }
 
 void staticGraphics() {
  
-  
-  
  circlesAndLines();
- 
- textMarkings(); 
- 
-
  
  //plotTemps();  
   
 }
 
+//  void circlesAndLines() {
+// 
+//  ellipse(512, 384, 580, 580);//outer circle
+//  ellipse(512, 384, 435, 435);//wind
+//  
+//  ellipse(512, 384, 290, 290);//pressure
+//  dashedLines();//draw the dashed measurement lines  
+//  ellipse(512, 384, 145, 145);//centre circle
+//  
+//  pushStyle();//save previous style
+//  
+//  strokeWeight(3);//define stroke for startline only
+//  stroke(165, 0, 0);//define stroke colour for startline only
+//  
+//  //line(512,311, 512,239);
+//  
+//  line(510,311,510,93);//red startline
+//  
+//  popStyle();//restore previous style
+//  
+//}
+
+void activeGraphics() {
+  
+  
+  
+  
+  
+  background(165,165,165);
+  
+  //textMarkings(); 
+  
+  ellipse(512, 384, 580, 580);//outer circle
+  ellipse(512, 384, 435, 435);//wind
+  
+  pushMatrix();
+  
+  translate(422,-249);
+  
+  rotate(PI/4);
+  
+  icePressure(); //draw the ice pressure arcs
+  
+  popMatrix();
+ 
+  //CIRCLE REDRAWS AFTER PRESSURE ARCS
+  ellipse(512, 384, 290, 290);//pressure
+  dashedLines();//draw the dashed measurement lines  
+  ellipse(512, 384, 145, 145);//centre circle
+  //END OF CIRCLE REDRAWS AFTER PRESSURE ARCS
+  
+  pushStyle();//save previous style
+  strokeWeight(3);//define stroke for startline only
+  stroke(165, 0, 0);//define stroke colour for startline only
+ 
+//line(512,311, 512,239);
+ 
+  line(510,311,510,93);//red startline  
+  popStyle();//restore previous style
+  
+  tempCoords();
+  
+  pushMatrix();
+  
+  translate(422,-249);
+  
+  rotate(PI/4);
+  
+  
+  
+  plotTempsAndLines();
+  
+  popMatrix();
+  
+  //textMarkings();
+  
+}
 
 //void plotTemps() {//this method plots the points of temperature taken from the array
 // 
@@ -154,45 +235,40 @@ void plotTempsAndLines() {
   fill(0,52,180);
   stroke(0,52,180);
   
-//       float [] temps = {-50,-23,-64,-9,-74,-55,-13,-100,-33};
-//  float [] tempsRange = {-1000,-80,-70,-60,-50,-40,-30,-20,-10,0};
+//       float [] temps = {10,-23,-64,-9,-74,-55,-13,-33,-10};
+//  float [] tempsRange = {-100,-90,-80,-70,-60,-50,-40,-30,-20,-10,100000};
 
 //  int[] AHourX = {512,512,512,512,512,512,512,512,512,512}; 
 //  int[] AHourY = {308,301,294,287,280,273,266,259,252,245};
  
  for(int i=0; i<9; i++) { //going through temps
    
-    for(int h=0; h<9; h++) { //going through tempsRange
+    for(int h=0; h<10; h++) { //going through tempsRange
+  
+    println(temps[i]);
   
     if(temps[i] >= tempsRange[h] && temps[i] < tempsRange[h+1]) {
     
       if(i==0) {
       
-        ellipse(AHourX[h],AHourY[h],5,5);
         
-        
-          
-//          previousTempX = AHourX[h];
-//          previousTempY = AHourY[h];
-//        
-      
         
         pushStyle();
         
         stroke(185,185,185);
         
-//        line(previousTempX, previousTempY, AHourX[h],AHourY[h]);
-        
         popStyle();
         
         previousTempX = AHourX[h];
         previousTempY = AHourY[h];
+         
+        ellipse(AHourX[h],AHourY[h],5,5);
         
       }
       
       else if(i==1) {
       
-        ellipse(BHourX[h],BHourY[h],5,5);
+        
         
         pushStyle();
         
@@ -202,21 +278,17 @@ void plotTempsAndLines() {
         
         popStyle();
         
+        ellipse(previousTempX,previousTempY,5,5);
+        
         previousTempX = BHourX[h];
         previousTempY = BHourY[h];
+        
+        
+        ellipse(BHourX[h],BHourY[h],5,5);
          
       }
       
       else if(i==2) {
-      
-        ellipse(CHourX[h],CHourY[h],5,5);
-       
-//        if(h==0) {
-//          
-//          previousTempX = CHourX[h];
-//          previousTempY = CHourY[h];
-//        
-//      }
       
         pushStyle();
         
@@ -226,22 +298,17 @@ void plotTempsAndLines() {
         
         popStyle();
         
+        ellipse(previousTempX,previousTempY,5,5);
+        
         previousTempX = CHourX[h];
         previousTempY = CHourY[h];
+        
+        ellipse(CHourX[h],CHourY[h],5,5);
         
       }
       
       else if(i==3) {
-      
-        ellipse(DHourX[h],DHourY[h],5,5);
-        
-//        if(h==0) {
-//          
-//          previousTempX = DHourX[h];
-//          previousTempY = DHourY[h];
-//        
-//      }
-      
+         
         pushStyle();
         
         stroke(185,185,185);
@@ -250,22 +317,19 @@ void plotTempsAndLines() {
         
         popStyle();
         
+        ellipse(previousTempX,previousTempY,5,5);
+        
         previousTempX = DHourX[h];
         previousTempY = DHourY[h];
+        
+        ellipse(DHourX[h],DHourY[h],5,5);
        
       }
       
       else if(i==4) {
       
-        ellipse(EHourX[h],EHourY[h],5,5);
         
-//        if(h==0) {
-//          
-//          previousTempX = EHourX[h];
-//          previousTempY = EHourY[h];
-//        
-//      }
-
+        
         pushStyle();
         
         stroke(185,185,185);
@@ -274,23 +338,19 @@ void plotTempsAndLines() {
         
         popStyle();
         
+        ellipse(previousTempX,previousTempY,5,5);
+        
         previousTempX = EHourX[h];
         previousTempY = EHourY[h];
         
+        ellipse(EHourX[h],EHourY[h],5,5);
         
       }
       
       else if(i==5) {
       
-        ellipse(FHourX[h],FHourY[h],5,5);
         
-//        if(h==0) {
-//          
-//          previousTempX = FHourX[h];
-//          previousTempY = FHourY[h];
-//        
-//      }
-      
+              
         pushStyle();
         
         stroke(185,185,185);
@@ -299,22 +359,17 @@ void plotTempsAndLines() {
         
         popStyle();
         
+        ellipse(previousTempX,previousTempY,5,5);
+        
         previousTempX = FHourX[h];
         previousTempY = FHourY[h];
+        
+        ellipse(FHourX[h],FHourY[h],5,5);
         
       }
       
       else if(i==6) {
-      
-        ellipse(GHourX[h],GHourY[h],5,5);
-        
-//        if(h==0) {
-//          
-//          previousTempX = GHourX[h];
-//          previousTempY = GHourY[h];
-//        
-//      }
-      
+         
         pushStyle();
         
         stroke(185,185,185);
@@ -323,22 +378,19 @@ void plotTempsAndLines() {
         
         popStyle();
         
+        ellipse(previousTempX,previousTempY,5,5);
+        
         previousTempX = GHourX[h];
         previousTempY = GHourY[h];
+        
+        ellipse(GHourX[h],GHourY[h],5,5);
         
       }
       
       else if(i==7) {
       
-        ellipse(HHourX[h],HHourY[h],5,5);
         
-//        if(h==1) {
-//          
-//          previousTempX = HHourX[h];
-//          previousTempY = HHourY[h];
-//        
-//      }
-      
+             
         pushStyle();
         
         stroke(185,185,185);
@@ -347,18 +399,15 @@ void plotTempsAndLines() {
         
         popStyle();
         
+        ellipse(previousTempX,previousTempY,5,5);
+        
         previousTempX = HHourX[h];
         previousTempY = HHourY[h];
         
+        ellipse(HHourX[h],HHourY[h],5,5);
+        
       }
-      
-//      else if(i==8) {
-//      
-//       ellipse(IHourX[h],IHourY[h],5,5);
-//        
-//        
-//      }      
-     
+           
     }
      
     }
@@ -370,15 +419,6 @@ void plotTempsAndLines() {
 }
 
 void tempCoords() {
-
-
-  
-  
-  //ellipse(512,461,5,5);
-//  
-//  int j = 1;
-  
-//ellipse(BHourX[2],BHourY[2],1,1);
   
   for(int j=0; j<=9; j++) {
         
@@ -397,9 +437,7 @@ void tempCoords() {
      ellipse(GHourX[j],GHourY[j],5,5);
      
      ellipse(HHourX[j],HHourY[j],5,5);
-     
-//     ellipse(IHourX[j],IHourY[j],5,5);
-     
+          
   }
   
 }
@@ -426,7 +464,7 @@ void icePressure() { // this method draws the ice pressure arcs
     }
   }
   popStyle(); //restore previous style
-  
+   
 }
 
 //  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(270), radians(315)); //1st sector of ice
@@ -444,7 +482,7 @@ void circlesAndLines() {
  
   ellipse(512, 384, 580, 580);//outer circle
   ellipse(512, 384, 435, 435);//wind
-  icePressure(); //draw the ice pressure arcs
+  
   ellipse(512, 384, 290, 290);//pressure
   dashedLines();//draw the dashed measurement lines  
   ellipse(512, 384, 145, 145);//centre circle
@@ -545,9 +583,9 @@ void textMarkings() {
   
   popMatrix();//end of rotation
   
-  text("-80˚",490,311);//-10 degrees celcius
+  text("-100˚",483,311);//-10 degrees celcius
   text("0˚",500,280);//-10 degrees celcius
-  text("0˚",493,250);
+  text("0˚",498,250);
  
  //end of temperature markings
  
