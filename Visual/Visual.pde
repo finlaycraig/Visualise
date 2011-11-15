@@ -1,14 +1,22 @@
-PFont font;
-
-int m;
-
-int n;
-
-int previousTempX;
-int previousTempY;
+  PFont font;
+  
+  int m;
+  
+  int n;
+  
+  float s;
+  
+  int previousTempX;
+  int previousTempY;
 
   float [] temps = {10,-23,-150,-9,-74,-55,-13,-33,-10};
   float [] tempsRange = {-100000,-90,-80,-70,-60,-50,-40,-30,-20,-10,100000};
+  
+  float[] tempsData = new float[10000];
+  
+  boolean tempsRising = false;
+  int tempsRisingFor;
+  int tempsRisingForCounter;
 
 //float [] currentIcePressure = {2, 2, 1, 4, 5, 6, 7, 8}; //array for live data feed of current ice pressure, latest at [0]
 
@@ -30,7 +38,8 @@ int previousTempY;
   int[] FHourX = {458,453,448,443,438,433,428,423,418,413};
   int[] FHourY = {438,443,448,453,458,463,468,473,478,483};
   
-  int[] GHourX = {372,379,386,393,400,407,414,421,428,435};
+  //int[] GHourX = {372,379,386,393,400,407,414,421,428,435};
+  int[] GHourX = {435,428,421,414,407,400,393,386,379,372};
   int[] GHourY = {384,384,384,384,384,384,384,384,384,384};
   
   int[] HHourX = {457,452,447,442,437,432,427,422,417,412};
@@ -40,6 +49,8 @@ int previousTempY;
 //  int[] IHourY = {330,325,320,315,310,305,300,295,290,285};
 
 void setup() {
+  
+  generateData();
 
   size(1024, 768);
   smooth();
@@ -47,7 +58,7 @@ void setup() {
   font = loadFont("Century-10.vlw");
   textFont(font);
   
-  staticGraphics();
+  //staticGraphics();
   
 }
 
@@ -60,14 +71,30 @@ void draw() {
  // delay(1000);
   
   //staticGraphics();
+  
+//   pushMatrix();
+//   
+//   while(s<1) {
+//   
+//   s = s + 0.01;
+//  
+//  translate(0,0);
+//  scale(s); 
+//  
+//   }
+
+   staticGraphics();
 
   activeGraphics();
  
    textMarkings();
+   
+//   popMatrix();
 
 // 
 //   translate(width/2, height/2);
 //   rotate(tempRadians);
+//ellipse(372,384,7,7);
 }
 
 void staticGraphics() {
@@ -75,6 +102,7 @@ void staticGraphics() {
  circlesAndLines();
  
  //plotTemps();  
+  
   
 }
 
@@ -103,7 +131,7 @@ void staticGraphics() {
 void activeGraphics() {
   
   
-  
+ 
   
   
   background(165,165,165);
@@ -113,15 +141,15 @@ void activeGraphics() {
   ellipse(512, 384, 580, 580);//outer circle
   ellipse(512, 384, 435, 435);//wind
   
-  pushMatrix();
-  
-  translate(422,-249);
-  
-  rotate(PI/4);
+//  pushMatrix();
+//  
+//  translate(422,-249);
+//  
+//  rotate(PI/4);
   
   icePressure(); //draw the ice pressure arcs
   
-  popMatrix();
+//  popMatrix();
  
   //CIRCLE REDRAWS AFTER PRESSURE ARCS
   ellipse(512, 384, 290, 290);//pressure
@@ -140,19 +168,21 @@ void activeGraphics() {
   
   tempCoords();
   
-  pushMatrix();
-  
-  translate(422,-249);
-  
-  rotate(PI/4);
+//  pushMatrix();
+//  
+//  translate(422,-249);
+//  
+//  rotate(PI/4);
   
   
   
   plotTempsAndLines();
   
-  popMatrix();
+//  popMatrix();
   
   //textMarkings();
+  
+  
   
 }
 
@@ -245,14 +275,12 @@ void plotTempsAndLines() {
    
     for(int h=0; h<10; h++) { //going through tempsRange
   
-    println(temps[i]);
+   // println(temps[i]);
   
-    if(temps[i] >= tempsRange[h] && temps[i] < tempsRange[h+1]) {
+    if(tempsData[i] >= tempsRange[h] && tempsData[i] < tempsRange[h+1]) {
     
       if(i==0) {
       
-        
-        
         pushStyle();
         
         stroke(185,185,185);
@@ -267,8 +295,6 @@ void plotTempsAndLines() {
       }
       
       else if(i==1) {
-      
-        
         
         pushStyle();
         
@@ -328,8 +354,6 @@ void plotTempsAndLines() {
       
       else if(i==4) {
       
-        
-        
         pushStyle();
         
         stroke(185,185,185);
@@ -348,8 +372,6 @@ void plotTempsAndLines() {
       }
       
       else if(i==5) {
-      
-        
               
         pushStyle();
         
@@ -389,8 +411,6 @@ void plotTempsAndLines() {
       
       else if(i==7) {
       
-        
-             
         pushStyle();
         
         stroke(185,185,185);
@@ -635,3 +655,85 @@ void textMarkings() {
 }
 
 //END OF STATIC GRAPHICS
+
+//RANDOM NUMBER GENERATORS FOR ARRAYS
+
+
+void generateData() {
+  
+  //generate temperatures
+  
+  tempsRisingFor = round(random(1,3));
+  tempsRisingForCounter = 0;
+  
+  tempsData[0] = round(random(-100,0));
+   
+  for(int i = 1; i<9999; i++) {
+    
+    if(tempsRising) {
+       
+       tempsData[i] = round(tempsData[i-1]-(tempsData[i-1]*0.5));
+       tempsRisingForCounter++;
+       
+       if(tempsData[i] < -100) {
+         
+         tempsData[i] = -100;
+       
+       }
+       
+       if(tempsData[i] > 0) {
+         
+         tempsData[i] = 0;
+       
+       }
+       
+       if(tempsRisingForCounter == tempsRisingFor) {
+       
+         tempsRising = false;
+         tempsRisingFor = round(random(1,3));
+         tempsRisingForCounter = 0;
+       
+       }
+      
+    }
+    
+    else {
+      
+      tempsData[i] = round(tempsData[i-1]*1.5); 
+      tempsRisingForCounter++;
+      
+      if(tempsData[i] < -100) {
+         
+         tempsData[i] = -100;
+       
+     }
+     
+     if(tempsData[i] > 0) {
+         
+         tempsData[i] = 0;
+       
+       }
+      
+      if(tempsRisingForCounter == tempsRisingFor) {
+       
+         tempsRising = true;
+         tempsRisingFor = round(random(1,3));
+         tempsRisingForCounter = 0;
+       
+       }
+      
+    }
+    
+  }
+  
+  //end of generate tempatures
+  
+  //generate pressure values
+
+  
+
+  //end of pressure values
+  
+}
+
+//END OF RANDOM NUMBER GENERATORS FOR ARRAYS
