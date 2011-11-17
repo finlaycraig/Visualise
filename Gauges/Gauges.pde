@@ -1,6 +1,9 @@
 PFont font;
 
-float a = 18.0;
+float fontScale = 18.0;
+
+int x = 912;
+int previousFoodX = x;
   
 void setup() {
 
@@ -10,9 +13,6 @@ void setup() {
   font = loadFont("Century-18.vlw");
   textFont(font);
 }
-
-//  font = loadFont("Century-12.vlw");
-//  textFont(font);
 
 void draw() {
   
@@ -94,51 +94,77 @@ void menNumbers() {
 
 void foodNumbers() {
   int[] foodUnits = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
-  int x = 912;
+  int[] foodX = {850, 868, 888, 912, 936, 956, 974};
+  int foodY = 375;
+//  int x = 912;
   int y = 375;
   
   pushStyle();//save previous style
   
   fill(77,76,76);//apply fill colour to text
   
+//  textAlign(CENTER, TOP);
+//  textSize(fontScale);
+////  text(foodUnits[14],x,y);
+//  text("10",x,y);
+
+  boolean scrolling = false;
+  
+  if(previousFoodX > x || previousFoodX < x) {
+    scrolling = true;
+//    println("scrolling is true");
+  }
+  
+  if(!scrolling) {
+    if(x > 946 && x < 956) {
+      x = 956; // ease this value from previousFoodX
+    }
+//    print("scrolling is false");
+  }
+  
   textAlign(CENTER, TOP);
-  textSize(a);
-//  text(foodUnits[14],x,y);
-  text("20",x,y);
+  textSize(fontScale); // fontScale = 18.0, but will decrement to 10.0 depending on input data by rotary motor
+  text(foodUnits[9],x,y); // x is data input by rotary motor
+  
+  previousFoodX = x;
+  
+  if(x < 950) {
+    x++;
+  }
 
 ///
 
   textAlign(CENTER, TOP);
   textSize(10);
-  text("17",850,375);
+  text("7",850,375);
   
   textAlign(CENTER, TOP);
   textSize(12);
-  text("18",868,375);  
+  text("8",868,375);  
     
   textAlign(CENTER, TOP);
   textSize(14);
-  text("19",888,375);
+  text("9",888,375);
   
 ///
 
   textAlign(CENTER, TOP);
   textSize(14);
-  text("21",936,375);
+  text("11",936,375);
   
   textAlign(CENTER, TOP);
   textSize(12);
-  text("22",956,375);
+  text("12",956,375);
   
   textAlign(CENTER, TOP);
   textSize(10);
-  text("23",974,375);
+  text("13",974,375);
   
-//  if(a > 10.05) {
-//    a = a - 0.05;
+//  if(fontScale > 10.05) {
+//    fontScale = fontScale - 0.05;
 //  }
-  
-  println(a);
+//  
+//  println(fontScale);
   
   popStyle();//restore previous style
 }
