@@ -13,6 +13,7 @@
   float [] tempsRange = {-100000,-90,-80,-70,-60,-50,-40,-30,-20,-10,100000};
   
   float[] tempsData = new float[10000];
+  float[] pressureData = new float[10000];
   
   boolean tempsRising = false;
   int tempsRisingFor;
@@ -63,6 +64,8 @@ void setup() {
 }
 
 void draw() {
+  
+  
 
   //delay(1000);
   
@@ -95,6 +98,24 @@ void draw() {
 //   translate(width/2, height/2);
 //   rotate(tempRadians);
 //ellipse(372,384,7,7);
+
+translate(width/2,height/2);
+
+
+
+  // degrees divided by number of second marks per round
+  //float radSec = 360 / 60 * (second()+(1-millis()));
+  float radSec = 360 / 60 * millis()/250;
+  println(millis());
+  pushMatrix();
+  rotate(radians(radSec));
+  //line(0, 0, 0, -72);
+  pushStyle();
+  strokeWeight(1);
+  fill(7,165,0);
+  ellipse(0,-72,5,5);
+  popStyle();
+  popMatrix();
 }
 
 void staticGraphics() {
@@ -102,6 +123,7 @@ void staticGraphics() {
  circlesAndLines();
  
  //plotTemps();  
+  
   
   
 }
@@ -475,9 +497,9 @@ void icePressure() { // this method draws the ice pressure arcs
   noStroke(); //no stroke for arcs
   fill(60, 100, 220); //fill colour blue
   
-  for(int i = 0; i < currentIcePressure.length; i++) { //7
+  for(int i = 0; i < 7; i++) { //7
     for(int k = 0; k < icePressureLevel.length; k++) { //11
-      if(currentIcePressure[i] >= icePressureRange[k] && currentIcePressure[i] < icePressureRange[k+1]) {
+      if(pressureData[i] >= icePressureRange[k] && pressureData[i] < icePressureRange[k+1]) {
         arc(width/2, height/2, icePressureLevel[k], icePressureLevel[k], radians(startRadian[i]), radians(endRadian[i]));
       }
       
@@ -667,23 +689,30 @@ void generateData() {
   tempsRisingForCounter = 0;
   
   tempsData[0] = round(random(-100,0));
+  pressureData[0] = round(((-tempsData[0]/10))*pow(1,2));
+  
+  println(tempsData[0]);
+  println(pressureData[0]);
    
   for(int i = 1; i<9999; i++) {
     
     if(tempsRising) {
        
        tempsData[i] = round(tempsData[i-1]-(tempsData[i-1]*0.5));
+       pressureData[i] = round(((-tempsData[i]/10))*pow(1,2));
        tempsRisingForCounter++;
        
        if(tempsData[i] < -100) {
          
          tempsData[i] = -100;
+         pressureData[i] = 100;
        
        }
        
        if(tempsData[i] > 0) {
          
          tempsData[i] = 0;
+         pressureData[i] = 0;
        
        }
        
@@ -699,18 +728,22 @@ void generateData() {
     
     else {
       
-      tempsData[i] = round(tempsData[i-1]*1.5); 
+      tempsData[i] = round(tempsData[i-1]*1.5);
+      pressureData[i] = round(((-tempsData[i]/10))*pow(1,2));
+      
       tempsRisingForCounter++;
       
       if(tempsData[i] < -100) {
          
          tempsData[i] = -100;
+         pressureData[i] = 100;
        
      }
      
      if(tempsData[i] > 0) {
          
          tempsData[i] = 0;
+         pressureData[i] = 0;
        
        }
       
