@@ -1,10 +1,11 @@
 PFont font;
 
-float fontScale = 18.0;
+float fontScale = 10.0;
 
 int x = 912;
 int previousFoodX = x;
 int foodMarker = 3;
+int currentValue = 1;
   
 void setup() {
 
@@ -107,10 +108,9 @@ void foodNumbers() {
 
   boolean scrolling = false;
   
-  int currentValue = 0;
   int startValue;
   
-  for(int i = 0; i < 8; i++) {
+  for(int i = 0; i < 9; i++) {
     startValue = 20 - currentValue;
     
     if(startValue < 0) {
@@ -122,6 +122,18 @@ void foodNumbers() {
     if(startValue < 0) {
     startValue = 20 + startValue;
     }
+    
+    int printValue = startValue+i;
+    
+    if(printValue > 20) {
+      printValue = printValue - 20;
+    }
+    
+    int xCoord = i;
+    
+    textAlign(CENTER, TOP);
+    textSize(fontScale);
+    text(printValue, 832+(xCoord*18), 375);
     
     println(i);
     println(startValue);
