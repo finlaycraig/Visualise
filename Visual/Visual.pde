@@ -12,12 +12,17 @@
   float [] temps = {10,-23,-150,-9,-74,-55,-13,-33,-10};
   float [] tempsRange = {-100000,-90,-80,-70,-60,-50,-40,-30,-20,-10,100000};
   
-  float[] tempsData = new float[10000];
-  float[] pressureData = new float[10000];
+  float[] tempsData = new float[10000];//array for temperature values
+  float[] pressureData = new float[10000];//array for pressure values
+  
+  float[] windDirection = new float[10000];
+  float[] windSpeed = new float[10000];
   
   boolean tempsRising = false;
   int tempsRisingFor;
   int tempsRisingForCounter;
+  
+  
 
 //float [] currentIcePressure = {2, 2, 1, 4, 5, 6, 7, 8}; //array for live data feed of current ice pressure, latest at [0]
 
@@ -64,114 +69,24 @@ void setup() {
 }
 
 void draw() {
-  
-  
 
-  //delay(1000);
-  
-  
-  
- // delay(1000);
-  
-  //staticGraphics();
-  
-//   pushMatrix();
-//   
-//   while(s<1) {
-//   
-//   s = s + 0.01;
-//  
-//  translate(0,0);
-//  scale(s); 
-//  
-//   }
-
-   staticGraphics();
-
-  activeGraphics();
+   activeGraphics();
  
    textMarkings();
    
-//   popMatrix();
-
-// 
-//   translate(width/2, height/2);
-//   rotate(tempRadians);
-//ellipse(372,384,7,7);
-
-translate(width/2,height/2);
-
-
-
-  // degrees divided by number of second marks per round
-  //float radSec = 360 / 60 * (second()+(1-millis()));
-  float radSec = 360 / 60 * millis()/250;
-  println(millis());
-  pushMatrix();
-  rotate(radians(radSec));
-  //line(0, 0, 0, -72);
-  pushStyle();
-  strokeWeight(1);
-  fill(7,165,0);
-  ellipse(0,-72,5,5);
-  popStyle();
-  popMatrix();
-}
-
-void staticGraphics() {
- 
- circlesAndLines();
- 
- //plotTemps();  
-  
-  
+   timeMarker();//moving green dot
   
 }
 
-//  void circlesAndLines() {
-// 
-//  ellipse(512, 384, 580, 580);//outer circle
-//  ellipse(512, 384, 435, 435);//wind
-//  
-//  ellipse(512, 384, 290, 290);//pressure
-//  dashedLines();//draw the dashed measurement lines  
-//  ellipse(512, 384, 145, 145);//centre circle
-//  
-//  pushStyle();//save previous style
-//  
-//  strokeWeight(3);//define stroke for startline only
-//  stroke(165, 0, 0);//define stroke colour for startline only
-//  
-//  //line(512,311, 512,239);
-//  
-//  line(510,311,510,93);//red startline
-//  
-//  popStyle();//restore previous style
-//  
-//}
 
 void activeGraphics() {
-  
-  
  
-  
-  
   background(165,165,165);
-  
-  //textMarkings(); 
-  
+   
   ellipse(512, 384, 580, 580);//outer circle
   ellipse(512, 384, 435, 435);//wind
   
-//  pushMatrix();
-//  
-//  translate(422,-249);
-//  
-//  rotate(PI/4);
-  
   icePressure(); //draw the ice pressure arcs
-  
-//  popMatrix();
  
   //CIRCLE REDRAWS AFTER PRESSURE ARCS
   ellipse(512, 384, 290, 290);//pressure
@@ -183,101 +98,14 @@ void activeGraphics() {
   strokeWeight(3);//define stroke for startline only
   stroke(165, 0, 0);//define stroke colour for startline only
  
-//line(512,311, 512,239);
- 
   line(510,311,510,93);//red startline  
   popStyle();//restore previous style
   
   tempCoords();
-  
-//  pushMatrix();
-//  
-//  translate(422,-249);
-//  
-//  rotate(PI/4);
-  
-  
-  
+    
   plotTempsAndLines();
-  
-//  popMatrix();
-  
-  //textMarkings();
-  
-  
-  
+
 }
-
-//void plotTemps() {//this method plots the points of temperature taken from the array
-// 
-// int tempStartX = 0;
-// int tempStartY = -108;
-// 
-// float previousX = 0;
-// float previousY = temps[0];
-// 
-// float tempRadians = -PI;
-// 
-// for(int k=0; k<=7; k++) {
-//   
-//   pushMatrix();
-// 
-//   translate(width/2, height/2);
-//   rotate(tempRadians);
-//   
-//   
-//   
-//   if(k==0) {//use this if statement to make the first point green.
-//     
-//   pushStyle();
-//   
-//   fill(7,165,0);
-//    
-//   ellipse(0, tempDecode(temps[k]), 5, 5);//draw point
-//   
-//   popStyle();
-//   
-//   }
-//   
-//   else {
-//    
-//    ellipse(0, tempDecode(temps[k]), 5, 5);//draw point
-//     
-//   }
-// 
-//   popMatrix();
-//   
-//   tempRadians = tempRadians + (PI/4);
-//   
-//   previousY = tempDecode(temps[k]);
-// 
-//  }
-//  
-//}
-
-//public float tempDecode(float yTemp) {
-//  
-//  if(yTemp == 1) {
-//   
-//    return 115;
-//    
-//  } 
-//  
-//  if(yTemp == 2) {
-//   
-//    return 120;
-//    
-//  }
-// 
-// if(yTemp == 10) {
-//   
-//    return 140;
-//    
-//  }  
-//  
-//  return 115;
-//  
-//}
 
 
 void plotTempsAndLines() {
@@ -286,18 +114,10 @@ void plotTempsAndLines() {
   
   fill(0,52,180);
   stroke(0,52,180);
-  
-//       float [] temps = {10,-23,-64,-9,-74,-55,-13,-33,-10};
-//  float [] tempsRange = {-100,-90,-80,-70,-60,-50,-40,-30,-20,-10,100000};
-
-//  int[] AHourX = {512,512,512,512,512,512,512,512,512,512}; 
-//  int[] AHourY = {308,301,294,287,280,273,266,259,252,245};
  
  for(int i=0; i<9; i++) { //going through temps
    
     for(int h=0; h<10; h++) { //going through tempsRange
-  
-   // println(temps[i]);
   
     if(tempsData[i] >= tempsRange[h] && tempsData[i] < tempsRange[h+1]) {
     
@@ -509,13 +329,20 @@ void icePressure() { // this method draws the ice pressure arcs
    
 }
 
-//  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(270), radians(315)); //1st sector of ice
-//  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(315), radians(360)); //2nd sector of ice
-//  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(0), radians(45)); //3rd sector of ice
-//  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(45), radians(90)); //4th sector of ice
-//  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(90), radians(135)); //5th sector of ice
-//  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(135), radians(180)); //6th sector of ice
-//  arc(width/2, height/2, icePressureLevel[i], icePressureLevel[i], radians(180), radians(225)); //7th sector of ice
+void timeMarker() {
+
+  translate(width/2,height/2);
+  float radSec = 360 / 60 * millis()/250;
+  pushMatrix();
+  rotate(radians(radSec));
+  pushStyle();
+  strokeWeight(1);
+  fill(7,165,0);
+  ellipse(0,-72,5,5);
+  popStyle();
+  popMatrix();
+
+}
 
 
 //BELOW IS STATIC GRAPHICS FOR SETUP OF CIRCLE. 
@@ -533,9 +360,7 @@ void circlesAndLines() {
   
   strokeWeight(3);//define stroke for startline only
   stroke(165, 0, 0);//define stroke colour for startline only
-  
-  //line(512,311, 512,239);
-  
+    
   line(510,311,510,93);//red startline
   
   popStyle();//restore previous style
@@ -626,7 +451,7 @@ void textMarkings() {
   popMatrix();//end of rotation
   
   text("-100˚",483,311);//-10 degrees celcius
-  text("0˚",500,280);//-10 degrees celcius
+  text("-50˚",490,280);//-10 degrees celcius
   text("0˚",498,250);
  
  //end of temperature markings
@@ -654,7 +479,6 @@ void textMarkings() {
   translate(width/2, height/2);
   rotate(PI/-8.0);
   text("Wind Speed",-30,-250);
-  text("0 MPH",-20,-240);  
   
   popMatrix();//end of rotation
   
@@ -680,19 +504,13 @@ void textMarkings() {
 
 //RANDOM NUMBER GENERATORS FOR ARRAYS
 
-
 void generateData() {
-  
-  //generate temperatures
-  
+    
   tempsRisingFor = round(random(1,3));
   tempsRisingForCounter = 0;
   
   tempsData[0] = round(random(-100,0));
   pressureData[0] = round(((-tempsData[0]/10))*pow(1,2));
-  
-  println(tempsData[0]);
-  println(pressureData[0]);
    
   for(int i = 1; i<9999; i++) {
     
@@ -758,15 +576,7 @@ void generateData() {
     }
     
   }
-  
-  //end of generate tempatures
-  
-  //generate pressure values
-
-  
-
-  //end of pressure values
-  
+    
 }
 
 //END OF RANDOM NUMBER GENERATORS FOR ARRAYS
