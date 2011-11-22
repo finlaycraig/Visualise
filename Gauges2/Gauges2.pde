@@ -6,6 +6,7 @@ Serial myPort;  // Create object from Serial class
 //float fontScale = 10.0;
 
 int x;
+//int encoderRead;
 //int previousFoodX = x;
 //int foodMarker = 3;
 int currentValue = 1;
@@ -27,20 +28,27 @@ void setup() {
   myPort.bufferUntil('\n');
 }
 
+void serialEvent(Serial myPort)
+{
+  if ( myPort.available() > 0) {  // If data is available,
+    String val = myPort.readStringUntil('\n');
+    if (val!=null) {
+      System.out.println(val);
+      val = trim(val);
+
+      int[] data = int(split(val, ":"));
+
+      int encoderRead = data[1];
+      x = encoderRead;
+    }
+  }
+}
+
 void draw() {
   
-  String val = myPort.readStringUntil('\n');
-  if (val!=null) {
-    System.out.println(val);
-    val = trim(val);
-    int[] data = int(split(val, ":"));
-//println("data1 = " + data[1]);
-    int x = (int)data[1];
-  }
-  
   gaugesStatic();
-  gaugesDynamic(x);
-  delay(100);
+  gaugesDynamic();
+//  delay(500);
 }
 
 void gaugesStatic() {
@@ -102,10 +110,10 @@ void coalGauge() {
   popStyle();//restore previous style
 }
 
-void gaugesDynamic(int x) {
+void gaugesDynamic() {
   
 //  menNumbers();
-  foodNumbers(x);
+  foodNumbers();
 //  coalNumbers();
 }
 
@@ -113,7 +121,7 @@ void menNumbers() {
   
 }
 
-void foodNumbers(int x) {
+void foodNumbers() {
 //  int[] foodUnits = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
   int[] foodX = {832, 850, 868, 888, 912, 936, 956, 974, 992};
 //  int[] foodXBetween = {859, 878, 900, 924, 946, 965};
@@ -132,36 +140,28 @@ println("x = "+x);
   savedDif = savedDif + encoderVal;
   
   if(savedDif > 300) {
-    currentValue++;
-    savedDif = 0;
+    if(previousState >= 0 && previousState < 200 && currentState > 800 && currentState <= 1023) {
+      currentValue--;
+      savedDif = 0;
+    }
+    else {
+      currentValue++;
+      savedDif = 0;
+    }
   }
   if(savedDif < -300) {
-    currentValue--;
-    savedDif = 0;
+    if(previousState > 800 && previousState <= 1023 && currentState >= 0 && currentState < 200) {
+      currentValue++;
+      savedDif = 0;
+    }
+    else {
+      currentValue--;
+      savedDif = 0;
+    }
   }
   
   previousState = currentState;
 
-//  int valIn = x;
-//  int previousVal = valIn;
-//
-//  
-//  if(previousVal > 800 && previousVal <= 1023 && valIn >= 0 && valIn < 200) {
-//    xIncr = xIncr+1;
-//  }
-//  else if(valIn > previousVal) {
-//    xIncr = xIncr+1;
-//  }
-//  
-//  if(previousVal >= 0 && previousVal < 200 && valIn > 900 && valIn <= 1023) {
-//    xIncr = xIncr-1;
-//  }
-//  else if(valIn < previousVal) {
-//    xIncr = xIncr-1;
-//  }
-//  
-//  previousVal = valIn;
-  
   pushStyle();//save previous style
   
   fill(77,76,76);//apply fill colour to text
