@@ -11,6 +11,7 @@ int foodMarker = 3;
 int currentValue = 1;
 int[] data;
   int xIncr = 0;
+  int printValue;
   
 void setup() {
 
@@ -37,8 +38,10 @@ void draw() {
   
   gaugesStatic();
   gaugesDynamic(x);
+  delay(100);
   
-//  delay(1000);
+//  currentValue++;
+//  currentValue--;
 }
 
 void gaugesStatic() {
@@ -150,20 +153,174 @@ void foodNumbers(int x) {
   for(int i = 0; i < 9; i++) {
     startValue = 20 - currentValue;
     
-    if(startValue < 0) {
+    if(startValue < 1) {
     startValue = 20 + startValue;
     }
     
     startValue = currentValue - 4;
     
-    if(startValue < 0) {
+    if(startValue < 1) {
     startValue = 20 + startValue;
     }
     
-    int printValue = startValue+i;
+    if(startValue > 0 && startValue < 13) {
+      printValue = startValue + i;
+    }
+    if(startValue == 13) {
+      if(i < 8) {
+        printValue = startValue + i;
+      }
+      if(i == 8) {
+        printValue = startValue + (i-20);
+      }
+    }
+    if(startValue == 14) {
+      if(i < 7) {
+        printValue = startValue + i;
+      }
+      if(i == 7) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 8) {
+        printValue = startValue + (i-20);
+      }
+    }
+    if(startValue == 15) {
+      if(i < 6) {
+        printValue = startValue + i;
+      }
+      if(i == 6) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 7) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 8) {
+        printValue = startValue + (i-20);
+      }
+    }
+    if(startValue == 16) {
+      if(i < 5) {
+        printValue = startValue + i;
+      }
+      if(i == 5) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 6) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 7) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 8) {
+        printValue = startValue + (i-20);
+      }
+    }
+    if(startValue == 17) {
+      if(i < 4) {
+        printValue = startValue + i;
+      }
+      if(i == 4) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 5) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 6) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 7) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 8) {
+        printValue = startValue + (i-20);
+      }
+    }
+    if(startValue == 18) {
+      if(i < 3) {
+        printValue = startValue + i;
+      }
+      if(i == 3) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 4) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 5) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 6) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 7) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 8) {
+        printValue = startValue + (i-20);
+      }
+    }
+    if(startValue == 19) {
+      if(i < 2) {
+        printValue = startValue + i;
+      }
+      if(i == 2) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 3) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 4) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 5) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 6) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 7) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 8) {
+        printValue = startValue + (i-20);
+      }
+    }
+    if(startValue == 20) {
+      if(i < 1) {
+        printValue = startValue + i;
+      }
+      if(i == 1) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 2) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 3) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 4) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 5) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 6) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 7) {
+        printValue = startValue + (i-20);
+      }
+      if(i == 8) {
+        printValue = startValue + (i-20);
+      }
+      
+    }
     
-    if(printValue > 20) {
-      printValue = printValue - 20;
+    if(startValue == 17) {
+      currentValue = 1;  
+    }
+    if(startValue == 16) {
+      currentValue = 20;  
     }
     
     int xCoord = i;
