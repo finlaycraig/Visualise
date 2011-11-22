@@ -1,11 +1,16 @@
 PFont font;
 
+import processing.serial.*;
+Serial myPort;  // Create object from Serial class
+
 float fontScale = 10.0;
 
 int x = 912;
 int previousFoodX = x;
 int foodMarker = 3;
 int currentValue = 1;
+int[] data;
+  int xIncr = 0;
   
 void setup() {
 
@@ -14,12 +19,24 @@ void setup() {
   
   font = loadFont("Century-18.vlw");
   textFont(font);
+  
+  myPort = new Serial(this, Serial.list()[0], 9600);
+  myPort.bufferUntil('\n');
 }
 
 void draw() {
   
+  String val = myPort.readStringUntil('\n');
+  if (val!=null) {
+    System.out.println(val);
+    val = trim(val);
+    int[] data = int(split(val, ":"));
+    
+    int x = data[0];
+  }
+  
   gaugesStatic();
-  gaugesDynamic();
+  gaugesDynamic(x);
   
 //  delay(1000);
 }
@@ -83,10 +100,10 @@ void coalGauge() {
   popStyle();//restore previous style
 }
 
-void gaugesDynamic() {
+void gaugesDynamic(int x) {
   
 //  menNumbers();
-  foodNumbers();
+  foodNumbers(x);
 //  coalNumbers();
 }
 
@@ -94,13 +111,33 @@ void menNumbers() {
   
 }
 
-void foodNumbers() {
+void foodNumbers(int x) {
   int[] foodUnits = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
   int[] foodX = {850, 868, 888, 912, 936, 956, 974};
   int[] foodXBetween = {859, 878, 900, 924, 946, 965};
   int foodY = 375;
 //  int x = 912;
   int y = 375;
+
+  int valIn = x;
+  int previousVal = valIn;
+
+  
+  if(previousVal > 800 && previousVal <= 1023 && valIn >= 0 && valIn < 200) {
+    xIncr = xIncr+1;
+  }
+  else if(valIn > previousVal) {
+    xIncr = xIncr+1;
+  }
+  
+  if(previousVal >= 0 && previousVal < 200 && valIn > 900 && valIn <= 1023) {
+    xIncr = xIncr-1;
+  }
+  else if(valIn < previousVal) {
+    xIncr = xIncr-1;
+  }
+  
+  previousVal = valIn;
   
   pushStyle();//save previous style
   
@@ -133,16 +170,11 @@ void foodNumbers() {
     
     textAlign(CENTER, TOP);
     textSize(fontScale);
-    text(printValue, 832+(xCoord*18), 375);
-    
-    println(i);
-    println(startValue);
-    println(currentValue);
+    text(printValue, 832+(xCoord*18)+xIncr, 375);
   }
   
   popStyle();//restore previous style
 }
-
 
 void coalNumbers() {
 
