@@ -1,10 +1,14 @@
   PFont font;
   
+  Timer timer;
+  
   int m;
   
   int n;
   
   float s;
+  
+  int currentArrayPosition = 9000;//the pointer for where all the data is measured from on the graphs
   
   int previousTempX;
   int previousTempY;
@@ -14,18 +18,23 @@
   
   float[] tempsData = new float[10000];//array for temperature values
   float[] pressureData = new float[10000];//array for pressure values
+  int[] tempColourR = {1,2,3,4,5,6,7,8,9,10};//Red colour value for temps
+  int[] tempColourG = {1,2,3,4,5,6,7,8,9,10};//Green colour value for temps
+  int[] tempColourB = {1,2,3,4,5,6,7,8,9,10};//Blue colour value for temps
   
-  float[] windDirection = new float[10000];
-  float[] windSpeed = new float[10000];
+  float[] icePressureLevel = {290, 304.5, 319, 333.5, 348, 362.5, 377, 391.5, 406, 420.5, 435}; //array for ice pressure levels to draw on arc
+  float[] icePressureRange = {-999999999,2,3,4,5,6,7,8,9,10,11,999999999}; //array for ice pressure ranges to compare with current ice pressure
+  int[] startRadian = {270,315,0,45,90,135,180}; //array for where each radian starts to draw arc
+  int[] endRadian = {315,360,45,90,135,180,225}; //array for where each radian stops to draw arc
+  
+  float[] windDirection = new float[10000];//array for wind direction
+  float[] windSpeed = new float[10000];//array for wind speed
+  float[] windOff = new float[10000];//array for wind speed
   
   boolean tempsRising = false;
   int tempsRisingFor;
   int tempsRisingForCounter;
   
-  
-
-//float [] currentIcePressure = {2, 2, 1, 4, 5, 6, 7, 8}; //array for live data feed of current ice pressure, latest at [0]
-
   int[] AHourX = {512,512,512,512,512,512,512,512,512,512}; 
   int[] AHourY = {308,301,294,287,280,273,266,259,252,245};
   
@@ -57,6 +66,8 @@
 void setup() {
   
   generateData();
+  
+  
 
   size(1024, 768);
   smooth();
@@ -64,17 +75,57 @@ void setup() {
   font = loadFont("Century-10.vlw");
   textFont(font);
   
-  //staticGraphics();
+  timer = new Timer(8000);
+  timer.start();
+  
+  mainDial();
   
 }
 
 void draw() {
+  
+  background(165,165,165);
+  
+  //mainDial();
 
-   activeGraphics();
+  if (timer.isFinished()) {
+    
+      currentArrayPosition--;
+      
+      timer.start();
+      
+      println("hello");
+      
+      print(tempsData[currentArrayPosition]);
+      print(',');
+      print(tempsData[currentArrayPosition+1]);
+      print(',');
+      print(tempsData[currentArrayPosition+2]);
+      print(',');
+      print(tempsData[currentArrayPosition+3]);
+      print(',');
+      print(tempsData[currentArrayPosition+4]);
+      print(',');
+      print(tempsData[currentArrayPosition+5]);
+      print(',');
+      print(tempsData[currentArrayPosition+6]);
+      print(',');
+      print(tempsData[currentArrayPosition+7]);
+      
+      
+  }
+  
+  mainDial();
+  
+  timeMarker();//moving green dot 
+  
+}
+
+void mainDial() {
  
-   textMarkings();
-   
-   timeMarker();//moving green dot
+  activeGraphics();
+ 
+  textMarkings();
   
 }
 
@@ -91,7 +142,7 @@ void activeGraphics() {
   //CIRCLE REDRAWS AFTER PRESSURE ARCS
   ellipse(512, 384, 290, 290);//pressure
   dashedLines();//draw the dashed measurement lines  
-  ellipse(512, 384, 145, 145);//centre circle
+
   //END OF CIRCLE REDRAWS AFTER PRESSURE ARCS
   
   pushStyle();//save previous style
@@ -104,9 +155,12 @@ void activeGraphics() {
   tempCoords();
     
   plotTempsAndLines();
+  
+  ellipse(512, 384, 145, 145);//centre circle drawn after temp points are plotted to ensure any lowest to lowest values don't draw a line over the centre circle.
+  
+  windSpeed();
 
 }
-
 
 void plotTempsAndLines() {
   
@@ -114,14 +168,22 @@ void plotTempsAndLines() {
   
   fill(0,52,180);
   stroke(0,52,180);
+  
+//   println(tempsData[currentArrayPosition]);
+//   println(tempsData[currentArrayPosition+1]);  
  
- for(int i=0; i<9; i++) { //going through temps
+ for(int i=currentArrayPosition; i<(currentArrayPosition+9); i++) { //going through temps
+ 
+//print(tempsData[currentArrayPosition]);
+//print(',');
    
     for(int h=0; h<10; h++) { //going through tempsRange
+    
+
   
     if(tempsData[i] >= tempsRange[h] && tempsData[i] < tempsRange[h+1]) {
     
-      if(i==0) {
+      if(i==currentArrayPosition) {
       
         pushStyle();
         
@@ -136,7 +198,7 @@ void plotTempsAndLines() {
         
       }
       
-      else if(i==1) {
+      else if(i==(currentArrayPosition+1)) {
         
         pushStyle();
         
@@ -150,13 +212,12 @@ void plotTempsAndLines() {
         
         previousTempX = BHourX[h];
         previousTempY = BHourY[h];
-        
-        
+          
         ellipse(BHourX[h],BHourY[h],5,5);
          
       }
       
-      else if(i==2) {
+      else if(i==(currentArrayPosition+2)) {
       
         pushStyle();
         
@@ -175,7 +236,7 @@ void plotTempsAndLines() {
         
       }
       
-      else if(i==3) {
+      else if(i==(currentArrayPosition+3)) {
          
         pushStyle();
         
@@ -194,7 +255,7 @@ void plotTempsAndLines() {
        
       }
       
-      else if(i==4) {
+      else if(i==(currentArrayPosition+4)) {
       
         pushStyle();
         
@@ -213,7 +274,7 @@ void plotTempsAndLines() {
         
       }
       
-      else if(i==5) {
+      else if(i==(currentArrayPosition+5)) {
               
         pushStyle();
         
@@ -232,7 +293,7 @@ void plotTempsAndLines() {
         
       }
       
-      else if(i==6) {
+      else if(i==(currentArrayPosition+6)) {
          
         pushStyle();
         
@@ -251,7 +312,7 @@ void plotTempsAndLines() {
         
       }
       
-      else if(i==7) {
+      else if(i==(currentArrayPosition+7)) {
       
         pushStyle();
         
@@ -305,26 +366,28 @@ void tempCoords() {
 }
 
 void icePressure() { // this method draws the ice pressure arcs
- 
-  float[] icePressureLevel = {290, 304.5, 319, 333.5, 348, 362.5, 377, 391.5, 406, 420.5, 435}; //array for ice pressure levels to draw on arc
-  float[] icePressureRange = {-999999999,2,3,4,5,6,7,8,9,10,11,999999999}; //array for ice pressure ranges to compare with current ice pressure
-  float[] currentIcePressure = {2.4, 1.12, 4, 11, 7.0, 5, 3}; //array for live data feed of current ice pressure, latest at [0] //TESTER!!!! this code is at top of program
-  int[] startRadian = {270,315,0,45,90,135,180}; //array for where each radian starts to draw arc
-  int[] endRadian = {315,360,45,90,135,180,225}; //array for where each radian stops to draw arc
-  
+
   pushStyle(); //save previous style
  
   noStroke(); //no stroke for arcs
   fill(60, 100, 220); //fill colour blue
   
-  for(int i = 0; i < 7; i++) { //7
+  println(currentArrayPosition);
+  
+  for(int i = 0; i <7; i++) { //7
+  
     for(int k = 0; k < icePressureLevel.length; k++) { //11
-      if(pressureData[i] >= icePressureRange[k] && pressureData[i] < icePressureRange[k+1]) {
+    
+      if(pressureData[currentArrayPosition+i] >= icePressureRange[k] && pressureData[currentArrayPosition+i] < icePressureRange[k+1]) {
+        //if(pressureData[i] >= icePressureRange[k] && pressureData[i] < icePressureRange[k+1]) {
         arc(width/2, height/2, icePressureLevel[k], icePressureLevel[k], radians(startRadian[i]), radians(endRadian[i]));
+        
       }
       
     }
+    
   }
+  
   popStyle(); //restore previous style
    
 }
@@ -332,7 +395,11 @@ void icePressure() { // this method draws the ice pressure arcs
 void timeMarker() {
 
   translate(width/2,height/2);
-  float radSec = 360 / 60 * millis()/250;
+  
+  float radSec = 360/8 * millis()/1000;
+  
+  //float radSec = 360/8 * second();
+  
   pushMatrix();
   rotate(radians(radSec));
   pushStyle();
@@ -340,8 +407,54 @@ void timeMarker() {
   fill(7,165,0);
   ellipse(0,-72,5,5);
   popStyle();
+  
+  float radSec2 = 360/8 * second();
+  
+  //pushMatrix();
+  rotate(radians(radSec));
+  pushStyle();
+  strokeWeight(1);
+  fill(160,0,0);
+  ellipse(0,-72,5,5);
+  popStyle();
   popMatrix();
 
+}
+
+void windSpeed() {
+ 
+ for(int i = 0; i<7; i++) {
+   
+   if(windSpeed[currentArrayPosition]>65) {
+    
+     windSpeed[currentArrayPosition] = 65;
+     
+   }
+   
+   pushMatrix();//prep. for text rotation
+    
+   translate(width/2, height/2);
+   rotate((PI/8)+(PI/4)*i);
+   
+   pushStyle();
+   
+   fill(112,111,111);//apply fill colour to text
+   noStroke();
+   arc(0,-252,windSpeed[currentArrayPosition+i],windSpeed[currentArrayPosition+i],radians(windDirection[currentArrayPosition+i]-windOff[currentArrayPosition+i]),radians(windDirection[currentArrayPosition+i]+windOff[currentArrayPosition+i]));
+   
+   popStyle();
+   
+   pushStyle();
+   
+   fill(173,0,0);
+   ellipse(0,-252,3,3);
+   
+   popStyle();
+   
+   popMatrix();
+   
+ }
+  
 }
 
 
@@ -502,7 +615,7 @@ void textMarkings() {
 
 //END OF STATIC GRAPHICS
 
-//RANDOM NUMBER GENERATORS FOR ARRAYS
+//RANDOM NUMBER GENERATORS FOR TEMPS, PRESSURE AND WIND
 
 void generateData() {
     
@@ -511,13 +624,21 @@ void generateData() {
   
   tempsData[0] = round(random(-100,0));
   pressureData[0] = round(((-tempsData[0]/10))*pow(1,2));
+  
+  windDirection[0] = round(random(0,360));
+  windSpeed[0] = round(random(15,70));
+  windOff[0] = round(random(0,100));
    
   for(int i = 1; i<9999; i++) {
     
+  windDirection[i] = round(random(0,360));
+  windSpeed[i] = round(random(0,70));
+  windOff[i] = round(random(0,100));
+    
     if(tempsRising) {
        
-       tempsData[i] = round(tempsData[i-1]-(tempsData[i-1]*0.5));
-       pressureData[i] = round(((-tempsData[i]/10))*pow(1,2));
+       tempsData[i] = round(tempsData[i-1]-(tempsData[i-1]*1.5));
+       pressureData[i] = round(((-tempsData[i]/10))*pow(1,3));
        tempsRisingForCounter++;
        
        if(tempsData[i] < -100) {
@@ -527,9 +648,9 @@ void generateData() {
        
        }
        
-       if(tempsData[i] > 0) {
+       if(tempsData[i] >= 0) {
          
-         tempsData[i] = 0;
+         tempsData[i] = -10;
          pressureData[i] = 0;
        
        }
@@ -537,7 +658,7 @@ void generateData() {
        if(tempsRisingForCounter == tempsRisingFor) {
        
          tempsRising = false;
-         tempsRisingFor = round(random(1,3));
+         tempsRisingFor = round(random(3,6));
          tempsRisingForCounter = 0;
        
        }
@@ -546,22 +667,22 @@ void generateData() {
     
     else {
       
-      tempsData[i] = round(tempsData[i-1]*1.5);
+      tempsData[i] = round(tempsData[i-1]*2.1);
       pressureData[i] = round(((-tempsData[i]/10))*pow(1,2));
       
       tempsRisingForCounter++;
       
-      if(tempsData[i] < -100) {
+      if(tempsData[i] <= -100) {
          
-         tempsData[i] = -100;
-         pressureData[i] = 100;
+         tempsData[i] = -50;
+         pressureData[i] = 5;
        
      }
      
      if(tempsData[i] > 0) {
          
-         tempsData[i] = 0;
-         pressureData[i] = 0;
+         tempsData[i] =-50;
+         pressureData[i] = 5;
        
        }
       
@@ -579,4 +700,4 @@ void generateData() {
     
 }
 
-//END OF RANDOM NUMBER GENERATORS FOR ARRAYS
+//END OF RANDOM NUMBER GENERATORS FOR TEMPS, PRESSURE AND WIND
