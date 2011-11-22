@@ -3,15 +3,17 @@ PFont font;
 import processing.serial.*;
 Serial myPort;  // Create object from Serial class
 
-float fontScale = 10.0;
+//float fontScale = 10.0;
 
-int x = 912;
-int previousFoodX = x;
-int foodMarker = 3;
+int x;
+//int previousFoodX = x;
+//int foodMarker = 3;
 int currentValue = 1;
+int printValue;
 int[] data;
-  int xIncr = 0;
-  int printValue;
+//int xIncr = 0;
+int previousState = 0;
+int savedDif = 0;
   
 void setup() {
 
@@ -32,16 +34,13 @@ void draw() {
     System.out.println(val);
     val = trim(val);
     int[] data = int(split(val, ":"));
-    
-    int x = data[0];
+//println("data1 = " + data[1]);
+    int x = (int)data[1];
   }
   
   gaugesStatic();
   gaugesDynamic(x);
   delay(100);
-  
-//  currentValue++;
-//  currentValue--;
 }
 
 void gaugesStatic() {
@@ -115,32 +114,53 @@ void menNumbers() {
 }
 
 void foodNumbers(int x) {
-  int[] foodUnits = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
-  int[] foodX = {850, 868, 888, 912, 936, 956, 974};
-  int[] foodXBetween = {859, 878, 900, 924, 946, 965};
+//  int[] foodUnits = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+  int[] foodX = {832, 850, 868, 888, 912, 936, 956, 974, 992};
+//  int[] foodXBetween = {859, 878, 900, 924, 946, 965};
   int foodY = 375;
-//  int x = 912;
-  int y = 375;
 
-  int valIn = x;
-  int previousVal = valIn;
+//currentValue++;  
+//currentValue--;
+//k = k - 10;
+println("x = "+x);
 
+//  int previousState;
+  int currentState = x;
   
-  if(previousVal > 800 && previousVal <= 1023 && valIn >= 0 && valIn < 200) {
-    xIncr = xIncr+1;
+  int encoderVal = currentState - previousState;
+  
+  savedDif = savedDif + encoderVal;
+  
+  if(savedDif > 300) {
+    currentValue++;
+    savedDif = 0;
   }
-  else if(valIn > previousVal) {
-    xIncr = xIncr+1;
+  if(savedDif < -300) {
+    currentValue--;
+    savedDif = 0;
   }
   
-  if(previousVal >= 0 && previousVal < 200 && valIn > 900 && valIn <= 1023) {
-    xIncr = xIncr-1;
-  }
-  else if(valIn < previousVal) {
-    xIncr = xIncr-1;
-  }
-  
-  previousVal = valIn;
+  previousState = currentState;
+
+//  int valIn = x;
+//  int previousVal = valIn;
+//
+//  
+//  if(previousVal > 800 && previousVal <= 1023 && valIn >= 0 && valIn < 200) {
+//    xIncr = xIncr+1;
+//  }
+//  else if(valIn > previousVal) {
+//    xIncr = xIncr+1;
+//  }
+//  
+//  if(previousVal >= 0 && previousVal < 200 && valIn > 900 && valIn <= 1023) {
+//    xIncr = xIncr-1;
+//  }
+//  else if(valIn < previousVal) {
+//    xIncr = xIncr-1;
+//  }
+//  
+//  previousVal = valIn;
   
   pushStyle();//save previous style
   
@@ -170,7 +190,7 @@ void foodNumbers(int x) {
       if(i < 8) {
         printValue = startValue + i;
       }
-      if(i == 8) {
+      if(i >= 8) {
         printValue = startValue + (i-20);
       }
     }
@@ -178,10 +198,7 @@ void foodNumbers(int x) {
       if(i < 7) {
         printValue = startValue + i;
       }
-      if(i == 7) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 8) {
+      if(i >= 7) {
         printValue = startValue + (i-20);
       }
     }
@@ -189,13 +206,7 @@ void foodNumbers(int x) {
       if(i < 6) {
         printValue = startValue + i;
       }
-      if(i == 6) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 7) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 8) {
+      if(i >= 6) {
         printValue = startValue + (i-20);
       }
     }
@@ -203,16 +214,7 @@ void foodNumbers(int x) {
       if(i < 5) {
         printValue = startValue + i;
       }
-      if(i == 5) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 6) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 7) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 8) {
+      if(i >= 5) {
         printValue = startValue + (i-20);
       }
     }
@@ -220,19 +222,7 @@ void foodNumbers(int x) {
       if(i < 4) {
         printValue = startValue + i;
       }
-      if(i == 4) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 5) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 6) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 7) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 8) {
+      if(i >= 4) {
         printValue = startValue + (i-20);
       }
     }
@@ -240,22 +230,7 @@ void foodNumbers(int x) {
       if(i < 3) {
         printValue = startValue + i;
       }
-      if(i == 3) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 4) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 5) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 6) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 7) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 8) {
+      if(i >= 3) {
         printValue = startValue + (i-20);
       }
     }
@@ -263,25 +238,7 @@ void foodNumbers(int x) {
       if(i < 2) {
         printValue = startValue + i;
       }
-      if(i == 2) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 3) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 4) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 5) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 6) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 7) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 8) {
+      if(i >= 2) {
         printValue = startValue + (i-20);
       }
     }
@@ -289,28 +246,7 @@ void foodNumbers(int x) {
       if(i < 1) {
         printValue = startValue + i;
       }
-      if(i == 1) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 2) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 3) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 4) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 5) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 6) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 7) {
-        printValue = startValue + (i-20);
-      }
-      if(i == 8) {
+      if(i >= 1) {
         printValue = startValue + (i-20);
       }
       
@@ -322,12 +258,25 @@ void foodNumbers(int x) {
     if(startValue == 16) {
       currentValue = 20;  
     }
-    
-    int xCoord = i;
+
     
     textAlign(CENTER, TOP);
-    textSize(fontScale);
-    text(printValue, 832+(xCoord*18)+xIncr, 375);
+    
+    if(i < 2 || i > 6) {
+      textSize(10);
+    }
+    else if(i < 3 || i > 5) {
+      textSize(12);
+    }
+    else if(i < 4 || i > 4) {
+      textSize(14);
+    }
+    else if(i == 4) {
+      textSize(18);
+    }
+    
+    text(printValue, foodX[i], foodY);
+    
   }
   
   popStyle();//restore previous style
