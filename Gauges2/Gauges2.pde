@@ -4,17 +4,20 @@ import processing.serial.*;
 Serial myPort;  // Create object from Serial class
 
 //float fontScale = 10.0;
+int[] data; // array of incoming data from arduino
 
-int x;
-//int encoderRead;
-//int previousFoodX = x;
-//int foodMarker = 3;
-int currentValue = 1;
-int printValue;
-int[] data;
-//int xIncr = 0;
-int previousState = 0;
-int savedDif = 0;
+int rotarySwitchVal1;
+int rotarySwitchVal2;
+int rotarySwitchVal3;
+
+int potentiometerVal;
+int previousFoodVal = 0;
+int savedFoodChange = 0;
+int currentFoodValue = 1;
+int printFoodValue;
+
+
+
   
 void setup() {
 
@@ -30,16 +33,25 @@ void setup() {
 
 void serialEvent(Serial myPort)
 {
-  if ( myPort.available() > 0) {  // If data is available,
+  if (myPort.available() > 0) {  // If data is available,
     String val = myPort.readStringUntil('\n');
     if (val!=null) {
-      System.out.println(val);
+//      System.out.println(val);
       val = trim(val);
 
       int[] data = int(split(val, ":"));
 
-      int encoderRead = data[1];
-      x = encoderRead;
+      int potentiometerRead = data[0];
+      potentiometerVal = potentiometerRead;
+      
+      int rotarySwitchRead1 = data[1];
+      rotarySwitchVal1 = data[1];
+      
+      int rotarySwitchRead2 = data[2];
+      rotarySwitchVal2 = data[2];
+      
+      int rotarySwitchRead3 = data[3];
+      rotarySwitchVal3 = data[3];
     }
   }
 }
@@ -122,143 +134,131 @@ void menNumbers() {
 }
 
 void foodNumbers() {
-//  int[] foodUnits = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
   int[] foodX = {832, 850, 868, 888, 912, 936, 956, 974, 992};
-//  int[] foodXBetween = {859, 878, 900, 924, 946, 965};
   int foodY = 375;
-
-//currentValue++;  
-//currentValue--;
-//k = k - 10;
-println("x = "+x);
-
-//  int previousState;
-  int currentState = x;
   
-  int encoderVal = currentState - previousState;
+  int currentFoodVal = potentiometerVal;
   
-  savedDif = savedDif + encoderVal;
+  int changedFoodVal = currentFoodVal - previousFoodVal;
   
-  if(savedDif > 300) {
-    if(previousState >= 0 && previousState < 200 && currentState > 800 && currentState <= 1023) {
-      currentValue--;
-      savedDif = 0;
-    }
-    else {
-      currentValue++;
-      savedDif = 0;
-    }
+  if(previousFoodVal >= 0 && previousFoodVal < 341 && currentFoodVal > 682 && currentFoodVal <= 1023) {
+    changedFoodVal = (0 - previousFoodVal);
+    changedFoodVal = changedFoodVal + (currentFoodVal - 1023);
   }
-  if(savedDif < -300) {
-    if(previousState > 800 && previousState <= 1023 && currentState >= 0 && currentState < 200) {
-      currentValue++;
-      savedDif = 0;
-    }
-    else {
-      currentValue--;
-      savedDif = 0;
-    }
+  if(previousFoodVal > 682 && previousFoodVal <= 1023 && currentFoodVal >= 0 && currentFoodVal < 341) {
+    changedFoodVal = (1023 - previousFoodVal);
+    changedFoodVal = changedFoodVal + (currentFoodVal - 0);
   }
   
-  previousState = currentState;
+  savedFoodChange = savedFoodChange + changedFoodVal;
+  
+  if(savedFoodChange > 300) {
+      currentFoodValue++;
+      savedFoodChange = 0;
+    }
+    
+  if(savedFoodChange < -300) {
+      currentFoodValue--;
+      savedFoodChange = 0;
+  }
+  
+  previousFoodVal = currentFoodVal;
+  
 
   pushStyle();//save previous style
   
   fill(77,76,76);//apply fill colour to text
-
-  boolean scrolling = false;
   
-  int startValue;
+  int startFoodValue;
   
   for(int i = 0; i < 9; i++) {
-    startValue = 20 - currentValue;
+    startFoodValue = 20 - currentFoodValue;
     
-    if(startValue < 1) {
-    startValue = 20 + startValue;
+    if(startFoodValue < 1) {
+    startFoodValue = 20 + startFoodValue;
     }
     
-    startValue = currentValue - 4;
+    startFoodValue = currentFoodValue - 4;
     
-    if(startValue < 1) {
-    startValue = 20 + startValue;
+    if(startFoodValue < 1) {
+    startFoodValue = 20 + startFoodValue;
     }
     
-    if(startValue > 0 && startValue < 13) {
-      printValue = startValue + i;
+    if(startFoodValue > 0 && startFoodValue < 13) {
+      printFoodValue = startFoodValue + i;
     }
-    if(startValue == 13) {
+    if(startFoodValue == 13) {
       if(i < 8) {
-        printValue = startValue + i;
+        printFoodValue = startFoodValue + i;
       }
       if(i >= 8) {
-        printValue = startValue + (i-20);
+        printFoodValue = startFoodValue + (i-20);
       }
     }
-    if(startValue == 14) {
+    if(startFoodValue == 14) {
       if(i < 7) {
-        printValue = startValue + i;
+        printFoodValue = startFoodValue + i;
       }
       if(i >= 7) {
-        printValue = startValue + (i-20);
+        printFoodValue = startFoodValue + (i-20);
       }
     }
-    if(startValue == 15) {
+    if(startFoodValue == 15) {
       if(i < 6) {
-        printValue = startValue + i;
+        printFoodValue = startFoodValue + i;
       }
       if(i >= 6) {
-        printValue = startValue + (i-20);
+        printFoodValue = startFoodValue + (i-20);
       }
     }
-    if(startValue == 16) {
+    if(startFoodValue == 16) {
       if(i < 5) {
-        printValue = startValue + i;
+        printFoodValue = startFoodValue + i;
       }
       if(i >= 5) {
-        printValue = startValue + (i-20);
+        printFoodValue = startFoodValue + (i-20);
       }
     }
-    if(startValue == 17) {
+    if(startFoodValue == 17) {
       if(i < 4) {
-        printValue = startValue + i;
+        printFoodValue = startFoodValue + i;
       }
       if(i >= 4) {
-        printValue = startValue + (i-20);
+        printFoodValue = startFoodValue + (i-20);
       }
     }
-    if(startValue == 18) {
+    if(startFoodValue == 18) {
       if(i < 3) {
-        printValue = startValue + i;
+        printFoodValue = startFoodValue + i;
       }
       if(i >= 3) {
-        printValue = startValue + (i-20);
+        printFoodValue = startFoodValue + (i-20);
       }
     }
-    if(startValue == 19) {
+    if(startFoodValue == 19) {
       if(i < 2) {
-        printValue = startValue + i;
+        printFoodValue = startFoodValue + i;
       }
       if(i >= 2) {
-        printValue = startValue + (i-20);
+        printFoodValue = startFoodValue + (i-20);
       }
     }
-    if(startValue == 20) {
+    if(startFoodValue == 20) {
       if(i < 1) {
-        printValue = startValue + i;
+        printFoodValue = startFoodValue + i;
       }
       if(i >= 1) {
-        printValue = startValue + (i-20);
+        printFoodValue = startFoodValue + (i-20);
       }
       
     }
     
-    if(startValue == 17) {
-      currentValue = 1;  
+    if(startFoodValue == 17) {
+      currentFoodValue = 1;  
     }
-    if(startValue == 16) {
-      currentValue = 20;  
+    if(startFoodValue == 16) {
+      currentFoodValue = 20;  
     }
-
     
     textAlign(CENTER, TOP);
     
@@ -275,7 +275,7 @@ println("x = "+x);
       textSize(18);
     }
     
-    text(printValue, foodX[i], foodY);
+    text(printFoodValue, foodX[i], foodY);
     
   }
   
