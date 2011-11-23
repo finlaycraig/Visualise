@@ -8,6 +8,8 @@
   
   float s;
   
+  float radSec;
+  
   int currentArrayPosition = 9000;//the pointer for where all the data is measured from on the graphs
   
   int previousTempX;
@@ -67,15 +69,13 @@ void setup() {
   
   generateData();
   
-  
-
   size(1024, 768);
   smooth();
   
   font = loadFont("Century-10.vlw");
   textFont(font);
   
-  timer = new Timer(8000);
+  timer = new Timer(15000);
   timer.start();
   
   mainDial();
@@ -92,33 +92,13 @@ void draw() {
     
       currentArrayPosition--;
       
-      timer.start();
-      
-      println("hello");
-      
-      print(tempsData[currentArrayPosition]);
-      print(',');
-      print(tempsData[currentArrayPosition+1]);
-      print(',');
-      print(tempsData[currentArrayPosition+2]);
-      print(',');
-      print(tempsData[currentArrayPosition+3]);
-      print(',');
-      print(tempsData[currentArrayPosition+4]);
-      print(',');
-      print(tempsData[currentArrayPosition+5]);
-      print(',');
-      print(tempsData[currentArrayPosition+6]);
-      print(',');
-      print(tempsData[currentArrayPosition+7]);
-      
-      
+      timer.start();      
   }
   
   mainDial();
   
-  timeMarker();//moving green dot 
-  
+  timeMarker();//moving green dot
+   
 }
 
 void mainDial() {
@@ -128,7 +108,6 @@ void mainDial() {
   textMarkings();
   
 }
-
 
 void activeGraphics() {
  
@@ -372,7 +351,7 @@ void icePressure() { // this method draws the ice pressure arcs
   noStroke(); //no stroke for arcs
   fill(60, 100, 220); //fill colour blue
   
-  println(currentArrayPosition);
+//  println(currentArrayPosition);
   
   for(int i = 0; i <7; i++) { //7
   
@@ -396,16 +375,18 @@ void timeMarker() {
 
   translate(width/2,height/2);
   
-  float radSec = 360/8 * millis()/1000;
+  //radSec = 360/8 * millis()/1000;
   
-  //float radSec = 360/8 * second();
+  radSec = 360/15 * timer.timePassed()/1000;
+ 
+  
   
   pushMatrix();
   rotate(radians(radSec));
   pushStyle();
   strokeWeight(1);
   fill(7,165,0);
-  ellipse(0,-72,5,5);
+  ellipse(0,-144,5,5);
   popStyle();
   
   float radSec2 = 360/8 * second();
@@ -417,6 +398,21 @@ void timeMarker() {
   fill(160,0,0);
   ellipse(0,-72,5,5);
   popStyle();
+  
+  rotate(radians(radSec));
+  pushStyle();
+  strokeWeight(1);
+  fill(240,121,0);
+  ellipse(0,-217,5,5);
+  popStyle();
+  
+  rotate(radians(radSec));
+  pushStyle();
+  strokeWeight(1);
+  fill(165,0,175);
+  ellipse(0,-288,5,5);
+  popStyle();
+  
   popMatrix();
 
 }
@@ -539,6 +535,7 @@ void textMarkings() {
  pushStyle();//save previus style
  
  fill(112,111,111);//apply fill colour to text
+ stroke(112,111,111);
  
  //hour markings
  
@@ -591,25 +588,36 @@ void textMarkings() {
   
   translate(width/2, height/2);
   rotate(PI/-8.0);
+  
   text("Wind Speed",-30,-250);
+  text("MPH",65,-255);
   
-  popMatrix();//end of rotation
   
-  text("+60 MPH",463,107);//top right
-  text("+60 MPH",463,165);//bottom right
+  text("n",-5,-283);
+  text("s",-5,-220);
   
-  pushMatrix();//prep. for text rotation
+  text("w",-95,-233);
+  text("e",85,-233);
   
-  translate(width/2, height/2);
-  rotate(-0.8);
-  text("+60 MPH",5,-220);
-  text("+60 MPH",5,-277);   
+  popMatrix();
   
-  popMatrix();//end of rotation
+  noFill();
+  arc(445,140, 20, 20,radians(0-90),radians(0));
+  arc(445,140, 40, 40,radians(0-90),radians(0));
+  arc(445,140, 60, 60,radians(0-90),radians(0));
+  
+  pushMatrix();
+  
+  translate(width/2,height/2);
+  rotate(radians(-45));
+  
+  //text("30
+  
+  popMatrix();
  
- //end of wind speed markings
- 
- popStyle();//reload previous style
+  popStyle();//reload previous style
+  
+  //end of wind speed markings
  
 }
 

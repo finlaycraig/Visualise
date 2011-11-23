@@ -2,6 +2,7 @@ class Timer {
  
   int savedTime; // When Timer started
   int totalTime; // How long Timer should last
+
   
   Timer(int tempTotalTime) {
     totalTime = tempTotalTime;
@@ -24,4 +25,14 @@ class Timer {
       return false;
     }
   }
+  
+  int timePassed() {
+   
+   return millis()-savedTime;
+    
+  }
+  
+
 }
+
+
