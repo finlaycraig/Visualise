@@ -55,15 +55,15 @@
   int[] FHourX = {458,453,448,443,438,433,428,423,418,413};
   int[] FHourY = {438,443,448,453,458,463,468,473,478,483};
   
-  //int[] GHourX = {372,379,386,393,400,407,414,421,428,435};
   int[] GHourX = {435,428,421,414,407,400,393,386,379,372};
   int[] GHourY = {384,384,384,384,384,384,384,384,384,384};
   
   int[] HHourX = {457,452,447,442,437,432,427,422,417,412};
   int[] HHourY = {330,325,320,315,310,305,300,295,290,285};
   
-//  int[] IHourX = {457,452,447,442,437,432,427,422,417,412};
-//  int[] IHourY = {330,325,320,315,310,305,300,295,290,285};
+  int food = 7;
+  int men = 24;
+  int coal = 13;
 
 void setup() {
   
@@ -83,7 +83,7 @@ void setup() {
 }
 
 void draw() {
-  
+   
   background(165,165,165);
   
   //mainDial();
@@ -95,7 +95,11 @@ void draw() {
       timer.start();      
   }
   
+  
+  
   mainDial();
+  
+  leftDials();
   
   timeMarker();//moving green dot
    
@@ -106,6 +110,38 @@ void mainDial() {
   activeGraphics();
  
   textMarkings();
+  
+  //OUTER CIRCLES
+  
+  ellipse(862,184,145,145);//right 1
+  ellipse(912,384,145,145);//right 2
+  ellipse(862,584,145,145);//right 3
+
+  //END OF OUTER CIRLCES
+  
+}
+
+void leftDials() {
+  
+ pushStyle();
+ fill(0,0,0);
+ ellipse(125,228,145,145);//left 1
+ ellipse(125,540,145,145);//left 2
+ popStyle();
+ 
+ int menFood = 145/(men+food);
+ 
+ pushStyle();
+ fill(167,0,11);
+ ellipse(125,228,145,145);
+ popStyle();
+ pushStyle();
+ fill(10,167,0);
+ noStroke();
+ ellipse(125,228,menFood*food,menFood*food);
+ popStyle();
+ 
+ 
   
 }
 
@@ -378,39 +414,42 @@ void timeMarker() {
   //radSec = 360/8 * millis()/1000;
   
   radSec = 360/15 * timer.timePassed()/1000;
- 
-  
   
   pushMatrix();
   rotate(radians(radSec));
   pushStyle();
   strokeWeight(1);
+  //stroke(7,165,0);
   fill(7,165,0);
-  ellipse(0,-144,5,5);
+  //ellipse(0,-144,5,5);
+  triangle(-3,-141,-3,-144,3,-144);
   popStyle();
   
-  float radSec2 = 360/8 * second();
+  //float radSec2 = 360/8 * second();
   
   //pushMatrix();
   rotate(radians(radSec));
   pushStyle();
   strokeWeight(1);
   fill(160,0,0);
-  ellipse(0,-72,5,5);
+  //ellipse(0,-72,5,5);
+  triangle(-3,-69,-3,-72,3,-72);
   popStyle();
   
   rotate(radians(radSec));
   pushStyle();
   strokeWeight(1);
   fill(240,121,0);
-  ellipse(0,-217,5,5);
+  //ellipse(0,-217,5,5);
+  triangle(-3,-214,-3,-217,3,-217);
   popStyle();
   
   rotate(radians(radSec));
   pushStyle();
   strokeWeight(1);
   fill(165,0,175);
-  ellipse(0,-288,5,5);
+  //ellipse(0,-288,5,5);
+  triangle(-3,-285,-3,-288,3,-288);
   popStyle();
   
   popMatrix();
@@ -433,8 +472,9 @@ void windSpeed() {
    rotate((PI/8)+(PI/4)*i);
    
    pushStyle();
-   
-   fill(112,111,111);//apply fill colour to text
+   //fill(155,175,255);
+   //fill(112,111,111);//apply fill colour to text
+   fill(169,206,182);
    noStroke();
    arc(0,-252,windSpeed[currentArrayPosition+i],windSpeed[currentArrayPosition+i],radians(windDirection[currentArrayPosition+i]-windOff[currentArrayPosition+i]),radians(windDirection[currentArrayPosition+i]+windOff[currentArrayPosition+i]));
    
@@ -442,8 +482,9 @@ void windSpeed() {
    
    pushStyle();
    
-   fill(173,0,0);
-   ellipse(0,-252,3,3);
+   fill(135,135,135);
+   noStroke();
+   ellipse(0,-252,5,5);
    
    popStyle();
    
@@ -546,7 +587,7 @@ void textMarkings() {
  text("2H",504,452);//two-hour indicator
  text("2.5H",462,433);//two-and-a-half-hours indicator
  text("3H",444,390);//three-hour indicator
- text("0.5H",462,344);//half-hour indicator
+ text("3.5H",462,344);//half-hour indicator
  
  //hour markings
  
@@ -609,12 +650,14 @@ void textMarkings() {
   pushMatrix();
   
   translate(width/2,height/2);
-  rotate(radians(-45));
+  rotate(radians(-90));
   
-  //text("30
+  text("30",230,-55);
+  text("60",230,-45);
+  text("+90",223,-35);
   
   popMatrix();
- 
+
   popStyle();//reload previous style
   
   //end of wind speed markings
@@ -682,14 +725,14 @@ void generateData() {
       
       if(tempsData[i] <= -100) {
          
-         tempsData[i] = -50;
+         tempsData[i] = -round(random(-50,-75));
          pressureData[i] = 5;
        
      }
      
      if(tempsData[i] > 0) {
          
-         tempsData[i] =-50;
+         tempsData[i] =round(random(-25,-50));
          pressureData[i] = 5;
        
        }
