@@ -1,11 +1,34 @@
 PFont font;
 
-float fontScale = 18.0;
+import processing.serial.*;
+Serial myPort;  // Create object from Serial class
 
-int x = 912;
-int previousFoodX = x;
-int foodMarker = 3;
-  
+//float fontScale = 10.0;
+int[] data; // array of incoming data from arduino
+
+int rotarySwitchVal;
+int potentiometerVal;
+
+int potentiometerMenVal;
+int potentiometerFoodVal;
+int potentiometerCoalVal;
+
+
+int previousMenVal = 0;
+int savedMenChange = 0;
+int currentMenValue = 47;
+int printMenValue;
+
+int previousFoodVal = 0;
+int savedFoodChange = 0;
+int currentFoodValue = 30;
+int printFoodValue;
+
+int previousCoalVal = 0;
+int savedCoalChange = 0;
+int currentCoalValue = 20;
+int printCoalValue;
+
 void setup() {
 
   size(1024, 768);
@@ -13,26 +36,58 @@ void setup() {
   
   font = loadFont("Century-18.vlw");
   textFont(font);
+  
+  myPort = new Serial(this, Serial.list()[0], 9600);
+  myPort.bufferUntil('\n');
+}
+
+void serialEvent(Serial myPort)
+{
+  if (myPort.available() > 0) {  // If data is available,
+    String val = myPort.readStringUntil('\n');
+    if (val!=null) {
+//      System.out.println(val);
+      val = trim(val);
+
+      int[] data = int(split(val, ":"));
+
+      int potentiometerRead = data[0];
+      potentiometerVal = potentiometerRead;
+      
+      int rotarySwitchRead = data[1];
+      rotarySwitchVal = rotarySwitchRead;
+    }
+      
+    if(rotarySwitchVal == 1) {
+      potentiometerMenVal = potentiometerVal;
+    }
+    if(rotarySwitchVal == 2) {
+      potentiometerFoodVal = potentiometerVal;
+    }
+    if(rotarySwitchVal == 3) {
+      potentiometerCoalVal = potentiometerVal;
+    }
+  
+  }
 }
 
 void draw() {
   
   gaugesStatic();
   gaugesDynamic();
-  
-//  delay(1000);
+//  delay(500);
 }
 
 void gaugesStatic() {
   
   fill(239,233,208);//apply fill colour to ellipses
-//  menGauge();
+  menGauge();
   foodGauge();
-//  coalGauge();
+  coalGauge();
 }
 
 void menGauge() {
-  ellipse(912, 184, 145, 145);//men circle
+  ellipse(862, 184, 145, 145);//men circle
   
   pushStyle();//save previous style
   fill(77,76,76);//apply fill colour to text
@@ -40,9 +95,15 @@ void menGauge() {
   strokeWeight(2);//define stroke for startline only
   stroke(165, 0, 0);//define stroke colour for pointer only
   
-  line(912,112,912,174);//red pointer
-  text("Men",902,204);
+  line(862,112,862,174);//red pointer
+  popStyle();
   
+  pushStyle();
+  fill(46,46,46);
+  textSize(10);
+  textAlign(CENTER);
+  text("Men",862,204);
+  text("(MEN)",862,214);
   popStyle();//restore previous style
 }
 
@@ -56,19 +117,19 @@ void foodGauge() {
   stroke(165, 0, 0);//define stroke colour for pointer only
   
   line(912,312,912,374);//red pointer
+  popStyle();
   
-//  pushMatrix();
-
+  pushStyle();
+  fill(46,46,46);
   textSize(10);
-  text("Food",901,404);
-
-//  popMatrix();
-
+  textAlign(CENTER);
+  text("Food",912,404);
+  text("(KG)",912,414);
   popStyle();//restore previous style
 }
 
 void coalGauge() {
-  ellipse(912, 584, 145, 145);//coal circle
+  ellipse(862, 584, 145, 145);//coal circle
   
   pushStyle();//save previous style
   fill(77,76,76);//apply fill colour to text
@@ -76,195 +137,478 @@ void coalGauge() {
   strokeWeight(2);//define stroke for startline only
   stroke(165, 0, 0);//define stroke colour for pointer only
   
-  line(912,512,912,574);//red pointer
-  text("Coal",901,604);
-    
+  line(862,512,862,574);//red pointer
+  popStyle();
+  
+  pushStyle();
+  fill(46,46,46);
+  textSize(10);
+  textAlign(CENTER);
+  text("Coal",862,604);
+  text("(TON)",862,614);
   popStyle();//restore previous style
 }
 
 void gaugesDynamic() {
-  
-//  menNumbers();
+  menNumbers();
   foodNumbers();
-//  coalNumbers();
+  coalNumbers();
 }
 
 void menNumbers() {
+  int[] menX = {782, 800, 818, 838, 862, 886, 906, 924, 942};
+  int menY = 175;
   
+  int currentMenVal = potentiometerMenVal;
+  
+  int changedMenVal = currentMenVal - previousMenVal;
+  
+  if((previousMenVal >= 0 && previousMenVal < 341) && (currentMenVal > 682 && currentMenVal <= 1023)) {
+    changedMenVal = (0 - previousMenVal);
+    changedMenVal = changedMenVal + (currentMenVal - 1023);
+  }
+  if((previousMenVal > 682 && previousMenVal <= 1023) && (currentMenVal >= 0 && currentMenVal < 341)) {
+    changedMenVal = (1023 - previousMenVal);
+    changedMenVal = changedMenVal + (currentMenVal - 0);
+  }
+  
+  savedMenChange = savedMenChange + changedMenVal;
+  
+  if(savedMenChange > 300) {
+      currentMenValue++;
+      savedMenChange = 0;
+    }
+    
+  if(savedMenChange < -300) {
+      currentMenValue--;
+      savedMenChange = 0;
+  }
+  
+  previousMenVal = currentMenVal;
+  
+  int startMenValue;
+  
+  for(int i = 0; i < 9; i++) {
+    startMenValue = 60 - currentMenValue;
+    
+    if(startMenValue < 1) {
+    startMenValue = 60 + startMenValue;
+    }
+    
+    startMenValue = currentMenValue - 4;
+    
+    if(startMenValue < 1) {
+    startMenValue = 60 + startMenValue;
+    }
+    
+    if(startMenValue > 0 && startMenValue < 53) {
+      printMenValue = startMenValue + i;
+    }
+    if(startMenValue == 53) {
+      if(i < 8) {
+        printMenValue = startMenValue + i;
+      }
+      if(i >= 8) {
+        printMenValue = startMenValue + (i-60);
+      }
+    }
+    if(startMenValue == 54) {
+      if(i < 7) {
+        printMenValue = startMenValue + i;
+      }
+      if(i >= 7) {
+        printMenValue = startMenValue + (i-60);
+      }
+    }
+    if(startMenValue == 55) {
+      if(i < 6) {
+        printMenValue = startMenValue + i;
+      }
+      if(i >= 6) {
+        printMenValue = startMenValue + (i-60);
+      }
+    }
+    if(startMenValue == 56) {
+      if(i < 5) {
+        printMenValue = startMenValue + i;
+      }
+      if(i >= 5) {
+        printMenValue = startMenValue + (i-60);
+      }
+    }
+    if(startMenValue == 57) {
+      if(i < 4) {
+        printMenValue = startMenValue + i;
+      }
+      if(i >= 4) {
+        printMenValue = startMenValue + (i-60);
+      }
+    }
+    if(startMenValue == 58) {
+      if(i < 3) {
+        printMenValue = startMenValue + i;
+      }
+      if(i >= 3) {
+        printMenValue = startMenValue + (i-60);
+      }
+    }
+    if(startMenValue == 59) {
+      if(i < 2) {
+        printMenValue = startMenValue + i;
+      }
+      if(i >= 2) {
+        printMenValue = startMenValue + (i-60);
+      }
+    }
+    if(startMenValue == 60) {
+      if(i < 1) {
+        printMenValue = startMenValue + i;
+      }
+      if(i >= 1) {
+        printMenValue = startMenValue + (i-60);
+      }
+      
+    }
+    
+    if(startMenValue == 57) {
+      currentMenValue = 1;  
+    }
+    if(startMenValue == 56) {
+      currentMenValue = 60;  
+    }
+    
+    textAlign(CENTER, TOP);
+    
+    if(i < 2 || i > 6) {
+      textSize(10);
+    }
+    else if(i < 3 || i > 5) {
+      textSize(12);
+    }
+    else if(i < 4 || i > 4) {
+      textSize(14);
+    }
+    else if(i == 4) {
+      textSize(18);
+    }
+    
+    if(i != 4) {
+      pushStyle();//save previous style
+      fill(77,76,76);//apply fill colour to text
+    }
+    if(i == 4) {
+      pushStyle();
+      fill(46,46,46);
+    }
+    if(printMenValue <= 45 || printMenValue >= 49) {
+      fill(165,0,0);
+    }
+    text(printMenValue, menX[i], menY);
+    popStyle();
+  }
 }
 
 void foodNumbers() {
-  int[] foodUnits = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
-  int[] foodX = {850, 868, 888, 912, 936, 956, 974};
-  int[] foodXBetween = {859, 878, 900, 924, 946, 965};
+  int[] foodX = {832, 850, 868, 888, 912, 936, 956, 974, 992};
   int foodY = 375;
-//  int x = 912;
-  int y = 375;
   
-  pushStyle();//save previous style
+  int currentFoodVal = potentiometerFoodVal;
   
-  fill(77,76,76);//apply fill colour to text
+  int changedFoodVal = currentFoodVal - previousFoodVal;
   
-//  textAlign(CENTER, TOP);
-//  textSize(fontScale);
-////  text(foodUnits[14],x,y);
-//  text("10",x,y);
-
-  boolean scrolling = false;
-  
-  if(previousFoodX > x || previousFoodX < x) {
-    scrolling = true;
-//    println("scrolling is true");
+  if((previousFoodVal >= 0 && previousFoodVal < 341) && (currentFoodVal > 682 && currentFoodVal <= 1023)) {
+    changedFoodVal = (0 - previousFoodVal);
+    changedFoodVal = changedFoodVal + (currentFoodVal - 1023);
+  }
+  if((previousFoodVal > 682 && previousFoodVal <= 1023) && (currentFoodVal >= 0 && currentFoodVal < 341)) {
+    changedFoodVal = (1023 - previousFoodVal);
+    changedFoodVal = changedFoodVal + (currentFoodVal - 0);
   }
   
-  if(!scrolling) {
-    if(x >= foodX[0] && x <= foodXBetween[0]) {
-      x = foodX[0]; // TO ADD ease this value from previousFoodX
+  savedFoodChange = savedFoodChange + changedFoodVal;
+  
+  if(savedFoodChange > 300) {
+      currentFoodValue++;
+      savedFoodChange = 0;
     }
-    if(x > foodXBetween[0] && x <= foodX[1] || x > foodX[1] && x <= foodXBetween[1]) {
-      x = foodX[1];
+    
+  if(savedFoodChange < -300) {
+      currentFoodValue--;
+      savedFoodChange = 0;
+  }
+  
+  previousFoodVal = currentFoodVal;
+  
+  int startFoodValue;
+  
+  for(int i = 0; i < 9; i++) {
+    startFoodValue = 30 - currentFoodValue;
+    
+    if(startFoodValue < 1) {
+    startFoodValue = 30 + startFoodValue;
     }
-    if(x > foodXBetween[1] && x <= foodX[2] || x > foodX[2] && x <= foodXBetween[2]) {
-      x = foodX[2];
+    
+    startFoodValue = currentFoodValue - 4;
+    
+    if(startFoodValue < 1) {
+    startFoodValue = 30 + startFoodValue;
     }
-    if(x > foodXBetween[2] && x <= foodX[3] || x > foodX[3] && x <= foodXBetween[3]) {
-      x = foodX[3];
+    
+    if(startFoodValue > 0 && startFoodValue < 23) {
+      printFoodValue = startFoodValue + i;
     }
-    if(x > foodXBetween[3] && x <= foodX[4] || x > foodX[4] && x <= foodXBetween[4]) {
-      x = foodX[4];
+    if(startFoodValue == 23) {
+      if(i < 8) {
+        printFoodValue = startFoodValue + i;
+      }
+      if(i >= 8) {
+        printFoodValue = startFoodValue + (i-30);
+      }
     }
-    if(x > foodXBetween[4] && x <= foodX[5] || x > foodX[5] && x <= foodXBetween[5]) {
-      x = foodX[5];
+    if(startFoodValue == 24) {
+      if(i < 7) {
+        printFoodValue = startFoodValue + i;
+      }
+      if(i >= 7) {
+        printFoodValue = startFoodValue + (i-30);
+      }
     }
-    if(x > foodXBetween[5] && x <= foodX[6]) {
-      x = foodX[6];
+    if(startFoodValue == 25) {
+      if(i < 6) {
+        printFoodValue = startFoodValue + i;
+      }
+      if(i >= 6) {
+        printFoodValue = startFoodValue + (i-30);
+      }
     }
-//    if(x > 946 && x <= 956) {
-//      x = 956;
-//    }
-//    print("scrolling is false");
+    if(startFoodValue == 26) {
+      if(i < 5) {
+        printFoodValue = startFoodValue + i;
+      }
+      if(i >= 5) {
+        printFoodValue = startFoodValue + (i-30);
+      }
+    }
+    if(startFoodValue == 27) {
+      if(i < 4) {
+        printFoodValue = startFoodValue + i;
+      }
+      if(i >= 4) {
+        printFoodValue = startFoodValue + (i-30);
+      }
+    }
+    if(startFoodValue == 28) {
+      if(i < 3) {
+        printFoodValue = startFoodValue + i;
+      }
+      if(i >= 3) {
+        printFoodValue = startFoodValue + (i-30);
+      }
+    }
+    if(startFoodValue == 29) {
+      if(i < 2) {
+        printFoodValue = startFoodValue + i;
+      }
+      if(i >= 2) {
+        printFoodValue = startFoodValue + (i-30);
+      }
+    }
+    if(startFoodValue == 30) {
+      if(i < 1) {
+        printFoodValue = startFoodValue + i;
+      }
+      if(i >= 1) {
+        printFoodValue = startFoodValue + (i-30);
+      }
+      
+    }
+    
+    if(startFoodValue == 27) {
+      currentFoodValue = 1;  
+    }
+    if(startFoodValue == 26) {
+      currentFoodValue = 30;  
+    }
+    
+    textAlign(CENTER, TOP);
+    if(i < 2 || i > 6) {
+      textSize(10);
+    }
+    else if(i < 3 || i > 5) {
+      textSize(12);
+    }
+    else if(i < 4 || i > 4) {
+      textSize(14);
+    }
+    else if(i == 4) {
+      textSize(18);
+    }
+    
+    if(i != 4) {
+      pushStyle();//save previous style
+      fill(77,76,76);//apply fill colour to text
+    }
+    if(i == 4) {
+      pushStyle();
+      fill(46,46,46);
+    }
+    if(printFoodValue <= 10) {
+      fill(165,0,0);
+    }
+    text(printFoodValue, foodX[i], foodY);
+    popStyle();
   }
-  
-  boolean markerHit = false;
-  
-  if(x == foodX[2]) { // if x of current foodUnits becomes less than left gauge section
-    foodMarker = foodMarker+1; // make marker point to current centric number
-    markerHit = true;
-  }
-  if(x == foodX[4]) { // if x of current foodUnits becomes more than right gauge section
-    foodMarker = foodMarker-1; // make marker point to current centric number
-    markerHit = true;
-  }
-  
-  if(!markerHit) {
-  textAlign(CENTER, TOP);
-  textSize(fontScale); // TO ADD fontScale = 18.0, but will decrement to 10.0 depending on input data by rotary motor
-  text(foodUnits[foodMarker],x,y); // TO ADD x is data input by rotary motor
-  
-  previousFoodX = x;
-  
-  textAlign(CENTER, TOP);
-  textSize(fontScale); // TO ADD fontScale = 18.0, but will decrement to 10.0 depending on input data by rotary motor
-  text(foodUnits[foodMarker+1],x+24,y); // TO ADD x is data input by rotary motor
-  
-  textAlign(CENTER, TOP);
-  textSize(fontScale); // TO ADD fontScale = 18.0, but will decrement to 10.0 depending on input data by rotary motor
-  text(foodUnits[foodMarker+2],x+44,y); // TO ADD x is data input by rotary motor
-  
-  textAlign(CENTER, TOP);
-  textSize(fontScale); // TO ADD fontScale = 18.0, but will decrement to 10.0 depending on input data by rotary motor
-  text(foodUnits[foodMarker+3],x+62,y); // TO ADD x is data input by rotary motor
-  
-  if(foodMarker+4 > 19) {
-    foodMarker = 0;
-  }
-  
-  textAlign(CENTER, TOP);
-  textSize(fontScale); // TO ADD fontScale = 18.0, but will decrement to 10.0 depending on input data by rotary motor
-  text(foodUnits[foodMarker+4],x+80,y); // TO ADD x is data input by rotary motor
-  
-  textAlign(CENTER, TOP);
-  textSize(fontScale); // TO ADD fontScale = 18.0, but will decrement to 10.0 depending on input data by rotary motor
-  text(foodUnits[foodMarker-1],x-24,y); // TO ADD x is data input by rotary motor
-  
-  textAlign(CENTER, TOP);
-  textSize(fontScale); // TO ADD fontScale = 18.0, but will decrement to 10.0 depending on input data by rotary motor
-  text(foodUnits[foodMarker-2],x-44,y); // TO ADD x is data input by rotary motor
-  
-  textAlign(CENTER, TOP);
-  textSize(fontScale); // TO ADD fontScale = 18.0, but will decrement to 10.0 depending on input data by rotary motor
-  text(foodUnits[foodMarker-3],x-62,y); // TO ADD x is data input by rotary motor
-  
-  if(foodMarker-4 < 0) {
-    foodMarker = 23;
-  }
-  
-  textAlign(CENTER, TOP);
-  textSize(fontScale); // TO ADD fontScale = 18.0, but will decrement to 10.0 depending on input data by rotary motor
-  text(foodUnits[foodMarker-4],x-80,y); // TO ADD x is data input by rotary motor
-  
-  if(foodMarker == 23) {
-    foodMarker = 3;
-  }
-  
-  if(foodMarker == 0) {
-    foodMarker = 3;
-  }
-  
-  }
-
-  if(markerHit) {
-  textAlign(CENTER, TOP);
-  textSize(fontScale); // TO ADD fontScale = 18.0, but will decrement to 10.0 depending on input data by rotary motor
-  text(foodUnits[foodMarker],x,y); // TO ADD x is data input by rotary motor
-  
-  previousFoodX = x;
-  }
-  
-  print("Food Marker: ");
-  println(foodMarker);
-  
-  if(x < 918) {
-    x++;
-  }
-
-/////
-//
-//  textAlign(CENTER, TOP);
-//  textSize(10);
-//  text("1",850,375);
-//  
-//  textAlign(CENTER, TOP);
-//  textSize(12);
-//  text("2",868,375);  
-//    
-//  textAlign(CENTER, TOP);
-//  textSize(14);
-//  text("3",888,375);
-//  
-/////
-//
-//  textAlign(CENTER, TOP);
-//  textSize(14);
-//  text("5",936,375);
-//  
-//  textAlign(CENTER, TOP);
-//  textSize(12);
-//  text("6",956,375);
-//  
-//  textAlign(CENTER, TOP);
-//  textSize(10);
-//  text("7",974,375);
-  
-//  if(fontScale > 10.05) {
-//    fontScale = fontScale - 0.05;
-//  }
-//  
-//  println(fontScale);
-  
-  popStyle();//restore previous style
 }
 
 void coalNumbers() {
+  int[] coalX = {782, 800, 818, 838, 862, 886, 906, 924, 942};
+  int coalY = 575;
+  
+  int currentCoalVal = potentiometerCoalVal;
+  
+  int changedCoalVal = currentCoalVal - previousCoalVal;
+  
+  if((previousCoalVal >= 0 && previousCoalVal < 341) && (currentCoalVal > 682 && currentCoalVal <= 1023)) {
+    changedCoalVal = (0 - previousCoalVal);
+    changedCoalVal = changedCoalVal + (currentCoalVal - 1023);
+  }
+  if((previousCoalVal > 682 && previousCoalVal <= 1023) && (currentCoalVal >= 0 && currentCoalVal < 341)) {
+    changedCoalVal = (1023 - previousCoalVal);
+    changedCoalVal = changedCoalVal + (currentCoalVal - 0);
+  }
+  
+  savedCoalChange = savedCoalChange + changedCoalVal;
+  
+  if(savedCoalChange > 300) {
+      currentCoalValue++;
+      savedCoalChange = 0;
+    }
+    
+  if(savedCoalChange < -300) {
+      currentCoalValue--;
+      savedCoalChange = 0;
+  }
+  
+  previousCoalVal = currentCoalVal;
+  
+  int startCoalValue;
+  
+  for(int i = 0; i < 9; i++) {
+    startCoalValue = 20 - currentCoalValue;
+    
+    if(startCoalValue < 1) {
+    startCoalValue = 20 + startCoalValue;
+    }
+    
+    startCoalValue = currentCoalValue - 4;
+    
+    if(startCoalValue < 1) {
+    startCoalValue = 20 + startCoalValue;
+    }
+    
+    if(startCoalValue > 0 && startCoalValue < 13) {
+      printCoalValue = startCoalValue + i;
+    }
+    if(startCoalValue == 13) {
+      if(i < 8) {
+        printCoalValue = startCoalValue + i;
+      }
+      if(i >= 8) {
+        printCoalValue = startCoalValue + (i-20);
+      }
+    }
+    if(startCoalValue == 14) {
+      if(i < 7) {
+        printCoalValue = startCoalValue + i;
+      }
+      if(i >= 7) {
+        printCoalValue = startCoalValue + (i-20);
+      }
+    }
+    if(startCoalValue == 15) {
+      if(i < 6) {
+        printCoalValue = startCoalValue + i;
+      }
+      if(i >= 6) {
+        printCoalValue = startCoalValue + (i-20);
+      }
+    }
+    if(startCoalValue == 16) {
+      if(i < 5) {
+        printCoalValue = startCoalValue + i;
+      }
+      if(i >= 5) {
+        printCoalValue = startCoalValue + (i-20);
+      }
+    }
+    if(startCoalValue == 17) {
+      if(i < 4) {
+        printCoalValue = startCoalValue + i;
+      }
+      if(i >= 4) {
+        printCoalValue = startCoalValue + (i-20);
+      }
+    }
+    if(startCoalValue == 18) {
+      if(i < 3) {
+        printCoalValue = startCoalValue + i;
+      }
+      if(i >= 3) {
+        printCoalValue = startCoalValue + (i-20);
+      }
+    }
+    if(startCoalValue == 19) {
+      if(i < 2) {
+        printCoalValue = startCoalValue + i;
+      }
+      if(i >= 2) {
+        printCoalValue = startCoalValue + (i-20);
+      }
+    }
+    if(startCoalValue == 20) {
+      if(i < 1) {
+        printCoalValue = startCoalValue + i;
+      }
+      if(i >= 1) {
+        printCoalValue = startCoalValue + (i-20);
+      }
+      
+    }
+    
+    if(startCoalValue == 17) {
+      currentCoalValue = 1;  
+    }
+    if(startCoalValue == 16) {
+      currentCoalValue = 20;  
+    }
+    
+    textAlign(CENTER, TOP);
+    
+    if(i < 2 || i > 6) {
+      textSize(10);
+    }
+    else if(i < 3 || i > 5) {
+      textSize(12);
+    }
+    else if(i < 4 || i > 4) {
+      textSize(14);
+    }
+    else if(i == 4) {
+      textSize(18);
+    }
 
+    if(i != 4) {
+      pushStyle();//save previous style
+      fill(77,76,76);//apply fill colour to text
+    }
+    if(i == 4) {
+      pushStyle();
+      fill(46,46,46);
+    }
+    if(printCoalValue <= 5) {
+      fill(165,0,0);
+    }
+    text(printCoalValue, coalX[i], coalY);
+    popStyle();
+  }
 }
