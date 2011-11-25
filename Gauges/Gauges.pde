@@ -124,7 +124,7 @@ void foodGauge() {
   textSize(10);
   textAlign(CENTER);
   text("Food",912,404);
-  text("(KG)",912,414);
+  text("(KG x 10³)",912,414);
   popStyle();//restore previous style
 }
 
