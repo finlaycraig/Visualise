@@ -424,10 +424,10 @@ void timeMarker() {
   //ellipse(0,-144,5,5);
   triangle(-3,-141,-3,-144,3,-144);
   popStyle();
-  
+  popMatrix();
   //float radSec2 = 360/8 * second();
   
-  //pushMatrix();
+  pushMatrix();
   rotate(radians(radSec));
   pushStyle();
   strokeWeight(1);
@@ -435,7 +435,9 @@ void timeMarker() {
   //ellipse(0,-72,5,5);
   triangle(-3,-69,-3,-72,3,-72);
   popStyle();
+  popMatrix();
   
+  pushMatrix();
   rotate(radians(radSec));
   pushStyle();
   strokeWeight(1);
@@ -443,7 +445,10 @@ void timeMarker() {
   //ellipse(0,-217,5,5);
   triangle(-3,-214,-3,-217,3,-217);
   popStyle();
+  popMatrix();
   
+  
+  pushMatrix();
   rotate(radians(radSec));
   pushStyle();
   strokeWeight(1);
