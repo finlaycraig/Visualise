@@ -202,21 +202,35 @@ void mainDial() {
 void leftDials() {
   
  pushStyle();
- fill(0,0,0);
+ fill(239,233,208);
  ellipse(125,228,145,145);//left 1
  ellipse(125,540,145,145);//left 2
  popStyle();
  
- int menFood = 145/(men+food);
+// int menFood = 145/(men+food);
+ 
+// men = (145/(47/30) * currentMenValue);
+// food = ((145/(30/47)) * currentFoodValue);
+float coal = map(currentCoalValue, 1, 20, 1, 145);
  
  pushStyle();
  fill(167,0,11);
- ellipse(125,228,145,145);
+ noStroke();
+ arc(125,228,men,men,radians(270),radians(450));
+// ellipse(125,228,145,145);
  popStyle();
+ 
  pushStyle();
  fill(10,167,0);
  noStroke();
- ellipse(125,228,menFood*food,menFood*food);
+ arc(125,228,food,food,radians(90),radians(270));
+// ellipse(125,228,menFood*food,menFood*food);
+ popStyle();
+ 
+ pushStyle();
+ fill(10,167,0);
+ noStroke();
+ ellipse(125,540,coal,coal);
  popStyle();
  
  
