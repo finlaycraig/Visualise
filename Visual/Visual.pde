@@ -81,12 +81,12 @@
   
   int previousMenVal = 0;
   int savedMenChange = 0;
-  int currentMenValue = 47;
+  int currentMenValue = 30;
   int printMenValue;
   
   int previousFoodVal = 0;
   int savedFoodChange = 0;
-  int currentFoodValue = 30;
+  int currentFoodValue = 20;
   int printFoodValue;
   
   int previousCoalVal = 0;
@@ -189,9 +189,9 @@ void mainDial() {
   
   //OUTER CIRCLES
   
-  ellipse(862,184,145,145);//right 1
-  ellipse(912,384,145,145);//right 2
-  ellipse(862,584,145,145);//right 3
+//  ellipse(862,184,145,145);//right 1
+//  ellipse(912,384,145,145);//right 2
+//  ellipse(862,584,145,145);//right 3
 
   //END OF OUTER CIRLCES
   
@@ -214,13 +214,13 @@ void probability() {
   
   if (currentMenValue > 47) {
    
-   probability = probability - (currentMenValue-47)*3;
+   probability = probability - (currentMenValue-47)*1.2;
     
   }
   
   else if (currentMenValue < 47) {
    
-   probability = probability - (47-currentMenValue)*5;
+   probability = probability - (47-currentMenValue)*1.3;
     
   }
   
@@ -253,17 +253,29 @@ void probability() {
   
   if (pressureData[currentArrayPosition] > 3) {
     
-    probability = probability - (pressureData[currentArrayPosition]*(48-currentMenValue)/2);
+    probability = probability - (pressureData[currentArrayPosition]*2);
+    
+  }
+  
+  if ((-tempsData[currentArrayPosition] + windSpeed[currentArrayPosition]) > 50) {
+   
+   probability = probability - ((-tempsData[currentArrayPosition] + windSpeed[currentArrayPosition])*0.1);
     
   }
   
   //CODE BELOW TO STOP GOING BELOW 0
   
-//  if (probability<=0) {
-//    
-//    probability = 1;
-//    
-//  }
+  if (probability<=0) {
+    
+    probability = 0;
+    
+  }
+  
+  if (probability >= 100) {
+   
+   probability = 99;
+    
+  }
   
   text(round(probability)+"%",513,400);
   
@@ -275,12 +287,12 @@ void probability() {
 
 void leftDials() {
   
- pushStyle();
- fill(239,233,208);
- ellipse(125,228,145,145);//left 1
- ellipse(125,540,145,145);//left 2
- popStyle();
- 
+// pushStyle();
+// fill(239,233,208);
+// ellipse(125,228,145,145);//left 1
+// ellipse(125,540,145,145);//left 2
+// popStyle();
+// 
 // int menFood = 145/(men+food);
  
 // men = (145/(47/30) * currentMenValue);
@@ -309,7 +321,7 @@ float coal = map(currentCoalValue, 1, 20, 1, 145);
  pushStyle();
  fill(103,103,103);
  noStroke();
- ellipse(125,540,coal,coal);
+ ellipse(130,550,coal,coal);
  popStyle();
  
 }
@@ -374,7 +386,7 @@ void foodGauge() {
   stroke(203,191,160,150);
   strokeWeight(24);
    
-  ellipse(912, 384, 145, 145);//food circle
+  ellipse(918, 384, 145, 145);//food circle
   
   popStyle();
   
@@ -382,7 +394,7 @@ void foodGauge() {
   
   else {
   
-  ellipse(912, 384, 145, 145);//food circle
+  ellipse(918, 384, 145, 145);//food circle
   
   }
   
