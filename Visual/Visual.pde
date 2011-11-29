@@ -104,7 +104,7 @@ void setup() {
   font = loadFont("Century-18.vlw");
   textFont(font);
   
-  timer = new Timer(15000);
+  timer = new Timer(60000);
   timer.start();
   
   myPort = new Serial(this, Serial.list()[0], 9600);
@@ -1046,10 +1046,22 @@ void timeMarker() {
   
   //radSec = 360/8 * millis()/1000;
   
-  radSec = 360/15 * timer.timePassed()/1000;
+  radSec = (36.0/6000.0)*timer.timePassed();
+  
+  //println(radSec);
   
   pushMatrix();
-  rotate(radians(radSec));
+  rotate(radians(radSec)*4);
+  pushStyle();
+  strokeWeight(1);
+  fill(160,0,0);
+  //ellipse(0,-72,5,5);
+  triangle(-3,-69,-3,-72,3,-72);
+  popStyle();
+  popMatrix();
+  
+  pushMatrix();
+  rotate(radians(radSec)*6);
   pushStyle();
   strokeWeight(1);
   //stroke(7,165,0);
@@ -1061,17 +1073,7 @@ void timeMarker() {
   //float radSec2 = 360/8 * second();
   
   pushMatrix();
-  rotate(radians(radSec));
-  pushStyle();
-  strokeWeight(1);
-  fill(160,0,0);
-  //ellipse(0,-72,5,5);
-  triangle(-3,-69,-3,-72,3,-72);
-  popStyle();
-  popMatrix();
-  
-  pushMatrix();
-  rotate(radians(radSec));
+  rotate(radians(radSec)*2);
   pushStyle();
   strokeWeight(1);
   fill(240,121,0);
@@ -1327,7 +1329,8 @@ void generateData() {
     
     if(tempsRising) {
        
-       tempsData[i] = round(tempsData[i-1]-(tempsData[i-1]*1.5));
+       //tempsData[i] = round(-(tempsData[i-1]*0.3)-(tempsData[i-1]*1.5));
+       tempsData[i] = round((tempsData[i-1]*1.5));
        pressureData[i] = round(((-tempsData[i]/10))*pow(1,3));
        tempsRisingForCounter++;
        
@@ -1364,14 +1367,14 @@ void generateData() {
       
       if(tempsData[i] <= -100) {
          
-         tempsData[i] = -round(random(-50,-75));
+         tempsData[i] = -round(random(-50,-65));
          pressureData[i] = 5;
        
      }
      
      if(tempsData[i] > 0) {
          
-         tempsData[i] =round(random(-25,-50));
+         tempsData[i] =round(random(-45,-50));
          pressureData[i] = 5;
        
        }
