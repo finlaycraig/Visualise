@@ -61,9 +61,9 @@
   int[] HHourX = {457,452,447,442,437,432,427,422,417,412};
   int[] HHourY = {330,325,320,315,310,305,300,295,290,285};
   
-  int food = 7;
-  int men = 24;
-  int coal = 13;
+  float food = 7;
+  float men = 24;
+  float coal = 13;
   
   import processing.serial.*;
   Serial myPort;  // Create object from Serial class
@@ -140,9 +140,9 @@ void draw() {
    
   popStyle();
   
-  food = currentFoodValue;
-  men = currentMenValue;
-  coal = currentCoalValue;
+  food = (float)currentFoodValue;
+  men = (float)currentMenValue;
+  coal = (float)currentCoalValue;
   
   
   
@@ -285,28 +285,29 @@ void leftDials() {
  
 // men = (145/(47/30) * currentMenValue);
 // food = ((145/(30/47)) * currentFoodValue);
+float menFoodConstant = (145/((men)+(food)));
 
-float menArc = (145/(men+food))*men;
-float foodArc = (145/(men+food))*food;
+float menArc = (menFoodConstant)*men;
+float foodArc = (menFoodConstant)*food;
 
 float coal = map(currentCoalValue, 1, 20, 1, 145);
  
  pushStyle();
- fill(167,0,11);
+ fill(203,160,160);
  noStroke();
  arc(125,228,menArc,menArc,radians(270),radians(450));
 // ellipse(125,228,145,145);
  popStyle();
  
  pushStyle();
- fill(10,167,0);
+ fill(203,191,160);
  noStroke();
  arc(125,228,foodArc,foodArc,radians(90),radians(270));
 // ellipse(125,228,menFood*food,menFood*food);
  popStyle();
  
  pushStyle();
- fill(10,167,0);
+ fill(103,103,103);
  noStroke();
  ellipse(125,540,coal,coal);
  popStyle();
@@ -331,7 +332,7 @@ void menGauge() {
   
   pushStyle();  
     
-  stroke(180,242,95,90);
+  stroke(203,160,160,150);
   strokeWeight(24);
    
   ellipse(862, 184, 145, 145);//men circle
@@ -370,7 +371,7 @@ void foodGauge() {
   
   pushStyle();  
     
-  stroke(180,242,95,90);
+  stroke(203,191,160,150);
   strokeWeight(24);
    
   ellipse(912, 384, 145, 145);//food circle
@@ -409,7 +410,7 @@ void coalGauge() {
   
   pushStyle();  
     
-  stroke(180,242,95,90);
+  stroke(103,103,103,150);
   strokeWeight(24);
    
   ellipse(862, 584, 145, 145);//coal circle
@@ -908,7 +909,7 @@ void coalNumbers() {
 
 void activeGraphics() {
  
-  background(165,165,165);
+  background(0,0,0);
    
   ellipse(512, 384, 580, 580);//outer circle
   ellipse(512, 384, 435, 435);//wind
