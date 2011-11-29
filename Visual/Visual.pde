@@ -20,9 +20,9 @@
   
   float[] tempsData = new float[10000];//array for temperature values
   float[] pressureData = new float[10000];//array for pressure values
-  int[] tempColourR = {1,2,3,4,5,6,7,8,9,10};//Red colour value for temps
-  int[] tempColourG = {1,2,3,4,5,6,7,8,9,10};//Green colour value for temps
-  int[] tempColourB = {1,2,3,4,5,6,7,8,9,10};//Blue colour value for temps
+  int[] tempColourR = {255,255,255,255,255,218,144,70,34,10};//Red colour value for temps
+  int[] tempColourG = {159,36,110,184,255,218,144,70,34,10};//Green colour value for temps
+  int[] tempColourB = {0,36,110,184,255,218,255,255,255,10};//Blue colour value for temps
   
   float[] icePressureLevel = {290, 304.5, 319, 333.5, 348, 362.5, 377, 391.5, 406, 420.5, 435}; //array for ice pressure levels to draw on arc
   float[] icePressureRange = {-999999999,2,3,4,5,6,7,8,9,10,11,999999999}; //array for ice pressure ranges to compare with current ice pressure
@@ -126,17 +126,13 @@ void draw() {
       
       timer.start();      
   }
-  
-  
-  
+ 
+   
+ 
   mainDial();
   
-  
-  
   leftDials();
-  
-  
-  
+ 
   pushStyle();
   
   gaugesStatic();
@@ -149,7 +145,9 @@ void draw() {
   coal = currentCoalValue;
   
   
+  
   timeMarker();//moving green dot
+  
    
 }
 
@@ -197,6 +195,82 @@ void mainDial() {
 
   //END OF OUTER CIRLCES
   
+  probability();
+
+}
+
+void probability() {
+ 
+//  textSize(18);
+//  textAlign(CENTER);
+  pushStyle();
+  
+  textSize(40);
+  
+  fill(0,0,0);
+  textAlign(CENTER);
+  
+  float probability = 99;
+  
+  if (currentMenValue > 47) {
+   
+   probability = probability - (currentMenValue-47)*3;
+    
+  }
+  
+  else if (currentMenValue < 47) {
+   
+   probability = probability - (47-currentMenValue)*5;
+    
+  }
+  
+  if (currentFoodValue < 30) {
+   
+   probability = probability -  pow(((30-currentFoodValue)*2),1);
+     
+    
+  }
+  
+  if (currentCoalValue < 20) {
+   
+   probability = probability - (20-currentCoalValue)*1.2;
+    
+  }
+  
+  if (((currentMenValue/currentFoodValue)/2) > 2) {
+   
+      probability = probability - (currentMenValue/currentFoodValue)*7;
+    
+  }
+  
+  if ((windSpeed[currentArrayPosition] < 40) && (coal < 20)) {
+   
+   probability = probability - ((20-currentCoalValue)*1.2)*(windSpeed[currentArrayPosition]*0.3);
+   
+     println(((20-currentCoalValue)*1.2)*windSpeed[currentArrayPosition]);
+    
+  }
+  
+  if (pressureData[currentArrayPosition] > 3) {
+    
+    probability = probability - (pressureData[currentArrayPosition]*(48-currentMenValue)/2);
+    
+  }
+  
+  //CODE BELOW TO STOP GOING BELOW 0
+  
+//  if (probability<=0) {
+//    
+//    probability = 1;
+//    
+//  }
+  
+  text(round(probability)+"%",513,400);
+  
+  popStyle();
+  
+  //ellipse(512,370,10,10);
+  
 }
 
 void leftDials() {
@@ -237,13 +311,9 @@ float coal = map(currentCoalValue, 1, 20, 1, 145);
  ellipse(125,540,coal,coal);
  popStyle();
  
- 
-  
 }
 
 void rightDials() {
- 
- 
   
 }
 
@@ -899,8 +969,12 @@ void plotTempsAndLines() {
         
         previousTempX = AHourX[h];
         previousTempY = AHourY[h];
+        
+        
          
         ellipse(AHourX[h],AHourY[h],5,5);
+        
+     
         
       }
       
@@ -913,6 +987,8 @@ void plotTempsAndLines() {
         line(previousTempX, previousTempY, BHourX[h],BHourY[h]);
         
         popStyle();
+        
+      
         
         ellipse(previousTempX,previousTempY,5,5);
         
@@ -1360,6 +1436,8 @@ void textMarkings() {
 
   popStyle();//reload previous style
   
+  
+  
   //end of wind speed markings
  
 }
@@ -1395,8 +1473,8 @@ void generateData() {
        
        if(tempsData[i] < -100) {
          
-         tempsData[i] = -100;
-         pressureData[i] = 100;
+         tempsData[i] = -round(random(-90,-50));
+         pressureData[i] = 10;
        
        }
        
@@ -1426,14 +1504,15 @@ void generateData() {
       
       if(tempsData[i] <= -100) {
          
-         tempsData[i] = -round(random(-50,-65));
+         tempsData[i] = -round(random(-90,-50));
+         //tempsData[i] = -100;
          pressureData[i] = 5;
        
      }
      
      if(tempsData[i] > 0) {
          
-         tempsData[i] =round(random(-45,-50));
+         tempsData[i] =round(random(-20,-40));
          pressureData[i] = 5;
        
        }
