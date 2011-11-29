@@ -291,7 +291,25 @@ void menGauge() {
 }
 
 void foodGauge() {
+  
+  if(rotarySwitchVal == 2) {
+  
+  pushStyle();  
+    
+  stroke(180,242,95,90);
+  strokeWeight(8);
+   
   ellipse(912, 384, 145, 145);//food circle
+  
+  popStyle();
+  
+  }
+  
+  else {
+  
+  ellipse(912, 384, 145, 145);//food circle
+  
+  }
   
   pushStyle();//save previous style
   fill(77,76,76);//apply fill colour to text
