@@ -872,8 +872,8 @@ void plotTempsAndLines() {
   
   pushStyle();
   
-  fill(0,52,180);
-  stroke(0,52,180);
+  fill(93,219,174);
+  stroke(93,219,174);
   
 //   println(tempsData[currentArrayPosition]);
 //   println(tempsData[currentArrayPosition+1]);  
@@ -1173,6 +1173,7 @@ void windSpeed() {
    //fill(155,175,255);
    //fill(112,111,111);//apply fill colour to text
    fill(169,206,182);
+//   fill(240,220,225);
    noStroke();
    arc(0,-252,windSpeed[currentArrayPosition+i],windSpeed[currentArrayPosition+i],radians(windDirection[currentArrayPosition+i]-windOff[currentArrayPosition+i]),radians(windDirection[currentArrayPosition+i]+windOff[currentArrayPosition+i]));
    
