@@ -1,3 +1,24 @@
+import processing.core.*; 
+import processing.xml.*; 
+
+import processing.serial.*; 
+
+import java.applet.*; 
+import java.awt.Dimension; 
+import java.awt.Frame; 
+import java.awt.event.MouseEvent; 
+import java.awt.event.KeyEvent; 
+import java.awt.event.FocusEvent; 
+import java.awt.Image; 
+import java.io.*; 
+import java.net.*; 
+import java.text.*; 
+import java.util.*; 
+import java.util.zip.*; 
+import java.util.regex.*; 
+
+public class Visual extends PApplet {
+
   PFont font;
   
   Timer timer;
@@ -24,7 +45,7 @@
   int[] tempColourG = {1,2,3,4,5,6,7,8,9,10};//Green colour value for temps
   int[] tempColourB = {1,2,3,4,5,6,7,8,9,10};//Blue colour value for temps
   
-  float[] icePressureLevel = {290, 304.5, 319, 333.5, 348, 362.5, 377, 391.5, 406, 420.5, 435}; //array for ice pressure levels to draw on arc
+  float[] icePressureLevel = {290, 304.5f, 319, 333.5f, 348, 362.5f, 377, 391.5f, 406, 420.5f, 435}; //array for ice pressure levels to draw on arc
   float[] icePressureRange = {-999999999,2,3,4,5,6,7,8,9,10,11,999999999}; //array for ice pressure ranges to compare with current ice pressure
   int[] startRadian = {270,315,0,45,90,135,180}; //array for where each radian starts to draw arc
   int[] endRadian = {315,360,45,90,135,180,225}; //array for where each radian stops to draw arc
@@ -65,7 +86,7 @@
   int men = 24;
   int coal = 13;
   
-  import processing.serial.*;
+  
   Serial myPort;  // Create object from Serial class
   
   //float fontScale = 10.0;
@@ -94,7 +115,7 @@
   int currentCoalValue = 20;
   int printCoalValue;
 
-void setup() {
+public void setup() {
   
   generateData();
   
@@ -114,7 +135,7 @@ void setup() {
   
 }
 
-void draw() {
+public void draw() {
    
   //background(165,165,165);
   
@@ -153,7 +174,7 @@ void draw() {
    
 }
 
-void serialEvent(Serial myPort)
+public void serialEvent(Serial myPort)
 {
   if (myPort.available() > 0) {  // If data is available,
     String val = myPort.readStringUntil('\n');
@@ -161,7 +182,7 @@ void serialEvent(Serial myPort)
 //      System.out.println(val);
       val = trim(val);
 
-      int[] data = int(split(val, ":"));
+      int[] data = PApplet.parseInt(split(val, ":"));
 
       int potentiometerRead = data[0];
       potentiometerVal = potentiometerRead;
@@ -183,7 +204,7 @@ void serialEvent(Serial myPort)
   }
 }
 
-void mainDial() {
+public void mainDial() {
  
   activeGraphics();
  
@@ -199,7 +220,7 @@ void mainDial() {
   
 }
 
-void leftDials() {
+public void leftDials() {
   
  pushStyle();
  fill(239,233,208);
@@ -237,13 +258,13 @@ float coal = map(currentCoalValue, 1, 20, 1, 145);
   
 }
 
-void rightDials() {
+public void rightDials() {
  
  
   
 }
 
-void gaugesStatic() {
+public void gaugesStatic() {
   
   fill(239,233,208);//apply fill colour to ellipses
   menGauge();
@@ -251,13 +272,13 @@ void gaugesStatic() {
   coalGauge();
 }
 
-void menGauge() {
+public void menGauge() {
   
   if(rotarySwitchVal == 1) {
   
   pushStyle();  
     
-  stroke(180,242,95,90);
+  stroke(180,0,0);
   strokeWeight(8);
    
   ellipse(862, 184, 145, 145);//men circle
@@ -290,7 +311,7 @@ void menGauge() {
   popStyle();//restore previous style
 }
 
-void foodGauge() {
+public void foodGauge() {
   ellipse(912, 384, 145, 145);//food circle
   
   pushStyle();//save previous style
@@ -307,11 +328,11 @@ void foodGauge() {
   textSize(10);
   textAlign(CENTER);
   text("Food",912,404);
-  text("(KG x 10³)",912,414);
+  text("(KG x 10\u00b3)",912,414);
   popStyle();//restore previous style
 }
 
-void coalGauge() {
+public void coalGauge() {
   ellipse(862, 584, 145, 145);//coal circle
   
   pushStyle();//save previous style
@@ -332,13 +353,13 @@ void coalGauge() {
   popStyle();//restore previous style
 }
 
-void gaugesDynamic() {
+public void gaugesDynamic() {
   menNumbers();
   foodNumbers();
   coalNumbers();
 }
 
-void menNumbers() {
+public void menNumbers() {
   int[] menX = {782, 800, 818, 838, 862, 886, 906, 924, 942};
   int menY = 175;
   
@@ -491,7 +512,7 @@ void menNumbers() {
   }
 }
 
-void foodNumbers() {
+public void foodNumbers() {
   int[] foodX = {832, 850, 868, 888, 912, 936, 956, 974, 992};
   int foodY = 375;
   
@@ -643,7 +664,7 @@ void foodNumbers() {
   }
 }
 
-void coalNumbers() {
+public void coalNumbers() {
   int[] coalX = {782, 800, 818, 838, 862, 886, 906, 924, 942};
   int coalY = 575;
   
@@ -796,7 +817,7 @@ void coalNumbers() {
   }
 }
 
-void activeGraphics() {
+public void activeGraphics() {
  
   background(165,165,165);
    
@@ -828,7 +849,7 @@ void activeGraphics() {
 
 }
 
-void plotTempsAndLines() {
+public void plotTempsAndLines() {
   
   pushStyle();
   
@@ -1007,7 +1028,7 @@ void plotTempsAndLines() {
   
 }
 
-void tempCoords() {
+public void tempCoords() {
   
   for(int j=0; j<=9; j++) {
         
@@ -1031,7 +1052,7 @@ void tempCoords() {
   
 }
 
-void icePressure() { // this method draws the ice pressure arcs
+public void icePressure() { // this method draws the ice pressure arcs
 
   pushStyle(); //save previous style
  
@@ -1058,13 +1079,13 @@ void icePressure() { // this method draws the ice pressure arcs
    
 }
 
-void timeMarker() {
+public void timeMarker() {
 
   translate(width/2,height/2);
   
   //radSec = 360/8 * millis()/1000;
   
-  radSec = (36.0/6000.0)*timer.timePassed();
+  radSec = (36.0f/6000.0f)*timer.timePassed();
   
   //println(radSec);
   
@@ -1114,7 +1135,7 @@ void timeMarker() {
 
 }
 
-void windSpeed() {
+public void windSpeed() {
  
  for(int i = 0; i<7; i++) {
    
@@ -1155,7 +1176,7 @@ void windSpeed() {
 
 //BELOW IS STATIC GRAPHICS FOR SETUP OF CIRCLE. 
 
-void circlesAndLines() {
+public void circlesAndLines() {
  
   ellipse(512, 384, 580, 580);//outer circle
   ellipse(512, 384, 435, 435);//wind
@@ -1175,15 +1196,15 @@ void circlesAndLines() {
   
 }
 
-void dashedLines() {
+public void dashedLines() {
   //line 1
   int x1 = 512;
   int y1 = 94;
   int x2 = 512;
   int y2 = 674;
   for (int i=0; i<=80; i++) {
-    float x = lerp(x1, x2, i/80.0);
-    float y = lerp(y1, y2, i/80.0);
+    float x = lerp(x1, x2, i/80.0f);
+    float y = lerp(y1, y2, i/80.0f);
     point(x, y);
   }
   //end of line 1
@@ -1194,8 +1215,8 @@ void dashedLines() {
    x2 = 802;
    y2 = 384;
   for (int i=0; i<=80; i++) {
-    float x = lerp(x1, x2, i/80.0);
-    float y = lerp(y1, y2, i/80.0);
+    float x = lerp(x1, x2, i/80.0f);
+    float y = lerp(y1, y2, i/80.0f);
     point(x, y);
   }
   //end of line 2
@@ -1206,8 +1227,8 @@ void dashedLines() {
    x2 = 307;
    y2 = 590;
   for (int i=0; i<=80; i++) {
-    float x = lerp(x1, x2, i/80.0);
-    float y = lerp(y1, y2, i/80.0);
+    float x = lerp(x1, x2, i/80.0f);
+    float y = lerp(y1, y2, i/80.0f);
     point(x, y);
   }
 
@@ -1221,15 +1242,15 @@ void dashedLines() {
    y2 = 590;
 
   for (int i=0; i<=80; i++) {
-    float x = lerp(x1, x2, i/80.0);
-    float y = lerp(y1, y2, i/80.0);
+    float x = lerp(x1, x2, i/80.0f);
+    float y = lerp(y1, y2, i/80.0f);
     point(x, y);
   }
   //end of line 4
   
 }
 
-void textMarkings() {
+public void textMarkings() {
   
  pushStyle();//save previus style
  
@@ -1255,14 +1276,14 @@ void textMarkings() {
   pushMatrix();//prep. for text rotation
   
   translate(width/2, height/2);
-  rotate(PI/-8.0);
-  text("Temp (˚C)",-27,-102); 
+  rotate(PI/-8.0f);
+  text("Temp (\u02daC)",-27,-102); 
   
   popMatrix();//end of rotation
   
-  text("-100˚",483,311);//-10 degrees celcius
-  text("-50˚",490,280);//-10 degrees celcius
-  text("0˚",498,250);
+  text("-100\u02da",483,311);//-10 degrees celcius
+  text("-50\u02da",490,280);//-10 degrees celcius
+  text("0\u02da",498,250);
  
  //end of temperature markings
  
@@ -1271,7 +1292,7 @@ void textMarkings() {
   pushMatrix();//prep. for text rotation
   
   translate(width/2, height/2);
-  rotate(PI/-8.0);
+  rotate(PI/-8.0f);
   text("Ice Pressure",-30,-180); 
   
   popMatrix();//end of rotation
@@ -1287,7 +1308,7 @@ void textMarkings() {
   pushMatrix();//prep. for text rotation
   
   translate(width/2, height/2);
-  rotate(PI/-8.0);
+  rotate(PI/-8.0f);
   
   text("Wind Speed",-30,-250);
   text("MPH",65,-255);
@@ -1327,7 +1348,7 @@ void textMarkings() {
 
 //RANDOM NUMBER GENERATORS FOR TEMPS, PRESSURE AND WIND
 
-void generateData() {
+public void generateData() {
     
   tempsRisingFor = round(random(1,3));
   tempsRisingForCounter = 0;
@@ -1348,7 +1369,7 @@ void generateData() {
     if(tempsRising) {
        
        //tempsData[i] = round(-(tempsData[i-1]*0.3)-(tempsData[i-1]*1.5));
-       tempsData[i] = round((tempsData[i-1]*1.5));
+       tempsData[i] = round((tempsData[i-1]*1.5f));
        pressureData[i] = round(((-tempsData[i]/10))*pow(1,3));
        tempsRisingForCounter++;
        
@@ -1378,7 +1399,7 @@ void generateData() {
     
     else {
       
-      tempsData[i] = round(tempsData[i-1]*2.1);
+      tempsData[i] = round(tempsData[i-1]*2.1f);
       pressureData[i] = round(((-tempsData[i]/10))*pow(1,2));
       
       tempsRisingForCounter++;
@@ -1412,3 +1433,45 @@ void generateData() {
 }
 
 //END OF RANDOM NUMBER GENERATORS FOR TEMPS, PRESSURE AND WIND
+class Timer {
+ 
+  int savedTime; // When Timer started
+  int totalTime; // How long Timer should last
+
+  
+  Timer(int tempTotalTime) {
+    totalTime = tempTotalTime;
+  }
+  
+  // Starting the timer
+  public void start() {
+    // When the timer starts it stores the current time in milliseconds.
+    savedTime = millis(); 
+  }
+  
+  // The function isFinished() returns true if 5,000 ms have passed. 
+  // The work of the timer is farmed out to this method.
+  public boolean isFinished() { 
+    // Check how much time has passed
+    int passedTime = millis()- savedTime;
+    if (passedTime > totalTime) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  
+  public int timePassed() {
+   
+   return millis()-savedTime;
+    
+  }
+  
+
+}
+
+
+  static public void main(String args[]) {
+    PApplet.main(new String[] { "--present", "--bgcolor=#666666", "--hide-stop", "Visual" });
+  }
+}

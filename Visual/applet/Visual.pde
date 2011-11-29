@@ -257,7 +257,7 @@ void menGauge() {
   
   pushStyle();  
     
-  stroke(180,242,95,90);
+  stroke(180,0,0);
   strokeWeight(8);
    
   ellipse(862, 184, 145, 145);//men circle
