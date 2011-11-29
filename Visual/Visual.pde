@@ -211,19 +211,23 @@ void leftDials() {
  
 // men = (145/(47/30) * currentMenValue);
 // food = ((145/(30/47)) * currentFoodValue);
+
+float menArc = (145/(men+food))*men;
+float foodArc = (145/(men+food))*food;
+
 float coal = map(currentCoalValue, 1, 20, 1, 145);
  
  pushStyle();
  fill(167,0,11);
  noStroke();
- arc(125,228,men,men,radians(270),radians(450));
+ arc(125,228,menArc,menArc,radians(270),radians(450));
 // ellipse(125,228,145,145);
  popStyle();
  
  pushStyle();
  fill(10,167,0);
  noStroke();
- arc(125,228,food,food,radians(90),radians(270));
+ arc(125,228,foodArc,foodArc,radians(90),radians(270));
 // ellipse(125,228,menFood*food,menFood*food);
  popStyle();
  
@@ -258,7 +262,7 @@ void menGauge() {
   pushStyle();  
     
   stroke(180,242,95,90);
-  strokeWeight(8);
+  strokeWeight(24);
    
   ellipse(862, 184, 145, 145);//men circle
   
@@ -297,7 +301,7 @@ void foodGauge() {
   pushStyle();  
     
   stroke(180,242,95,90);
-  strokeWeight(8);
+  strokeWeight(24);
    
   ellipse(912, 384, 145, 145);//food circle
   
@@ -330,7 +334,25 @@ void foodGauge() {
 }
 
 void coalGauge() {
+  
+  if(rotarySwitchVal == 3) {
+  
+  pushStyle();  
+    
+  stroke(180,242,95,90);
+  strokeWeight(24);
+   
   ellipse(862, 584, 145, 145);//coal circle
+  
+  popStyle();
+  
+  }
+  
+  else {
+  
+  ellipse(862, 584, 145, 145);//coal circle
+  
+  }
   
   pushStyle();//save previous style
   fill(77,76,76);//apply fill colour to text
